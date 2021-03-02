@@ -1,0 +1,11 @@
+{
+    "name": "sapo-theme-zendo",
+    "versions": {
+      "v1.1.0": [
+        "templates/page.guide.bwt",
+        "assets/load.svg"
+      ],
+      "v1.0.0": []
+    }
+  }
+  
