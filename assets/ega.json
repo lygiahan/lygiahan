@@ -1,0 +1,13 @@
+{
+    "version": "1",
+    "packages": {},
+    "pages": {},
+    "blogs": {},
+    "articles": {},
+    "egaTheme": {
+        "sapo-theme-zendo": {
+            "name": "sapo-theme-zendo",
+            "version": "v1.0.0"
+        }
+    }
+}
