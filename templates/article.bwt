@@ -1,0 +1,144 @@
+{% include 'breadcrumb' %} 
+<section class="blogpage">
+	<div class="container article-wraper" itemscope itemtype="https://schema.org/Article">
+		<meta itemprop="mainEntityOfPage" content="{{ article.url }}">
+		<meta itemprop="description" content="{{ article.summary | strip_html }}">
+		<meta itemprop="author" content="{{ article.author }}">
+		<meta itemprop="headline" content="{{ article.title | truncate: 100}}">
+		<meta itemprop="image" content="https:{%if article.image.src == null %}{{ 'logo.png' | asset_url }}{%else%}{{ article.image.src }}{%endif%}">
+		<meta itemprop="datePublished" content="{{ article.published_on | date: 'dd-MM-yyyy' }}">
+		<meta itemprop="dateModified" content="{{ article.created_on | date: 'dd-MM-yyyy' }}">
+		<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+			<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+				<img class="hidden" src="{{'logo.png'|asset_url}}" alt="{{ store.name }}"/>
+				<meta itemprop="url" content="https:{{'logo.png'|asset_url}}">
+				<meta itemprop="width" content="400">
+				<meta itemprop="height" content="60">
+			</div>
+			<meta itemprop="name" content="{{store.name}}">
+		</div>
+		<div class="wrap_background_aside padding-top-0 margin-bottom-40">
+			<div class="row">		
+
+				<div class="left-content col-lg-3 col-12">
+					{% include 'sidebar-blog' %}
+				</div>
+				<section class="right-content col-lg-9 col-md-12 col-sm-12 col-xs-12">
+					<article class="article-main">
+						<div class="article-details">
+							<h1 class="article-title">{{ article.title }}</h1>
+							<div class="time-post f">
+								<i class="far fa-clock"></i>{{ article.published_on | date:'dd/MM/yyy' }}
+							</div>
+							<div class="time-post">
+								<i class="fa fa-user"></i> <span>{{article.author}}</span>
+							</div>
+							<div class="article-content">
+								<div class="rte">
+									{{ article.content }}
+								</div>
+							</div>
+						</div>
+						<div class="tag-share">
+							<div class="row">
+								{%if article.tags.size >0%}
+								<div class="col-lg-6 col-12 tags-list">
+									<div class="inline-block">
+										<i class="fa fa-tags"></i>
+										&nbsp;<b>Tags:</b>
+										{% for tag in article.tags %}
+										<div class="tag_list">
+											<a href="/blogs/all/tagged/{{ tag | handle }}" title="{{tag}}">{{ tag }}</a>{%unless forloop.last%},&nbsp;{%endunless%}			
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+								{%endif%}
+								{%if settings.article_social_enable%}
+								<div class="{%if  article.tags.size > 0%}col-xs-12 col-sm-6{%else%}col-xs-12 col-sm-12{%endif%} share_social">
+									<div class="addthis_inline_share_toolbox share_add {%if  article.tags.size > 0%}tag{%else%}no-tag{%endif%}">
+											<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-58589c2252fc2da4"></script>
+										</div>
+								</div>
+								{%endif%}
+							</div>
+						</div>
+						<div class="section clearfix">
+							{% if blog.comments_enabled %}
+							<div class="w-100 clearfix">
+								{% form "article_comments", article %} 
+								{% if comment and comment.created_on %}
+								<p class="alert alert-success">
+									{% if blog.moderated %} 
+									Bạn đã đăng bình luận thành công. Chúng tôi sẽ đăng bình luận của bạn sau khi được kiểm duyệt. 
+									{% else %} 
+									Bạn đã đăng bình luận thành công. Xin cảm ơn! 
+									{% endif %}
+								</p>
+								{% endif %}
+
+								{% if form.errors.size > 0 %}
+								<div class="alert alert-danger">{{ form.errors | default_errors }}</div>
+								{% endif %}
+								<div class="form-coment clear-fix">
+									<div class="margin-top-0 margin-bottom-30 w-100">
+										<h5 class="title-form-coment">Viết bình luận của bạn</h5>
+									</div>
+									<div class="row">
+										<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+											<fieldset class="form-group padding-0">
+												<input placeholder="Họ tên" type="text" class="form-control form-control-lg" value="{{ customer.name }}" id="full-name" name="Author" Required>
+											</fieldset>
+										</div>
+										<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+											<fieldset class="form-group padding-0">	
+												<input placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" type="email" class="form-control form-control-lg" value="{{ customer.email }}" name="Email" Required>
+											</fieldset>
+										</div>
+										<fieldset class="form-group padding-right-15 padding-left-15 col-lg-12 col-md-12 col-sm-12 col-xs-12">	
+											<textarea placeholder="Nội dung" class="form-control form-control-lg" id="comment" name="Body" rows="6" Required>{{ form.body }}</textarea>
+										</fieldset>
+										<div class="margin-bottom-fix margin-bottom-50-article clearfix padding-right-15 padding-left-15">
+											<button type="submit" class="btn btn-primary button_45">Gửi bình luận</button>
+										</div>
+									</div>
+								</div> <!-- End form mail -->
+								{% endform %}
+								{% if article.comments_count > 0 %}
+								{% paginate article.comments by 5%} 
+								<div id="article-comments">
+									<h5 class="margin-bottom-25">Bình luận {% if article.comments_count > 0 %}<span>({{ article.comments_count }})</span>{% endif %}</h5>
+									{% for comment in article.comments %}							
+									<div class="article-comment clearfix">
+										<figure class="article-comment-user-image">
+											<img src="https://www.gravatar.com/avatar/{{ comment.email | remove: ' ' | strip_newlines | downcase | md5 }}?s=110&d=identicon" alt="binh-luan" class="block">
+										</figure>
+
+										<div class="article-comment-user-comment">
+											<p class="user-name-comment"><strong>{{ comment.author }}</strong>
+												<a href="#article_comments" class="btn-link pull-xs-right hidden">Trả lời</a></p>
+											<span class="article-comment-date-bull">{{ comment.created_on | date:'dd/MM/yyyy' }}</span>
+											<p class="cm">{{ comment.content }}</p>
+
+										</div>
+									</div> 
+									{% endfor %}   
+								</div>
+								<div class="text-center article_page section paginate_center">
+									{% if paginate.pages > 1 %}
+									{% include 'paginate-pages' %}
+									{% endif %}
+								</div>
+								{%endpaginate%}
+								{% endif %}
+
+							</div>
+							{% endif %}
+						</div>
+
+					</article>
+				</section>
+			</div>
+		</div>
+	</div>
+</section>

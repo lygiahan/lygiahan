@@ -1,0 +1,58 @@
+{% include 'breadcrumb' %} 
+<section class="blogpage">
+	<div class="containers" itemscope itemtype="https://schema.org/Blog">
+		<meta itemprop="name" content="{{ blog.name }}">
+		<meta itemprop="description" content="{{ blog.description | default: store.description }}">
+		<div class="wrap_background_aside margin-bottom-0">
+
+			{% paginate blog.articles by settings.blogs_number_perpage %}
+			<div class="clearfix full_background_blog">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-12 left-content">
+							{% include 'sidebar-blog' %}
+						</div>
+						<div class="col-lg-9 col-12">
+{% form 'customer_login' %}
+...ds
+{% endform %}
+							<h1 class="title_page">{{ page_title }}</h1>
+							{%assign page_active = false%}
+
+							{% for part in paginate.parts %}
+							{% if part.title == paginate.current_page and part.title == '1' %}
+							{%assign page_active = true%}
+							{%endif%}
+							{%endfor%}
+							{% if blog.articles_count > 0 %}
+							<div class="row row_blog_responsive">
+								{% for article in blog.articles %}
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<div class="blog-list">
+										{%include 'blog_list_item'%}
+									</div>
+								</div>
+								{%endfor%}
+
+							</div>
+							<div class="text-right pageinate-page-blog">
+								{% if paginate.pages > 1 %}
+								{% include 'paginate-pages' %}
+								{% endif %}
+							</div>
+							{%else%}
+							<div class="section">
+								<p>Danh mục này đang cập nhật bài viết</p>
+							</div>
+							{%endif%}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{% endpaginate %}
+		</div>
+
+	</div>
+</section>
+<div class="ab-module-article-mostview"></div>

@@ -1,0 +1,21 @@
+{%assign blog_size = blogs[settings.url_index_blog].articles_count%}
+<section class="section_blog">
+	<div class="container">
+		<div class="title_module_main clearfix">
+			<h2 class="h2">
+				<a href="{{settings.url_index_blog}}" title="{{settings.title_index_blog}}">{{settings.title_index_blog}}</a>
+			</h2>
+		</div>
+		{%if blog_size > 0%}
+		<div class="slickblog">
+			{% for article in blogs[settings.url_index_blog].articles limit: {{settings.limit_index_blog}} %}
+			{%include 'blog_list_item'%}
+			{%endfor%}
+		</div>
+		{%else%}
+		<div class="section owl-blog">
+			<p class="block a-center">Danh mục đang cập nhật bài viết</p>
+		</div>
+		{%endif%}
+	</div>
+</section>

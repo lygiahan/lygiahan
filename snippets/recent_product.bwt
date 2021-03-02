@@ -1,0 +1,7 @@
+<div class="title_module section">
+	<h2 class="h2"><span>{{ settings.recent_products_title }}</span></h2>
+</div>
+<div class="recent_items">
+	<div id="recent-content" class="slick-recent">
+	</div>
+</div>

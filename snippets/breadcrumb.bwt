@@ -1,0 +1,73 @@
+<section class="bread-crumb">
+	<span class="crumb-border"></span>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 a-left">
+				<ul class="breadcrumb">					
+					<li class="home">
+						<a  href="/" ><span >Trang chủ</span></a>						
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>
+					{% if template contains 'product' %}
+					{% if product.collections.size > 0 %}
+					<li>
+						<a class="changeurl"  href="{{ product.collections.first.url }}"><span >{{ product.collections.first.name }}</span></a>						
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>
+					{% endif %}
+					<li><strong><span>{{ product.name }}</span></strong></li>
+					{% elsif template contains 'collection' and collection.alias %}
+					{% if current_tags %}					
+					{% capture url %}/collections/{{ collection.alias }}{% endcapture %}
+					<li>						
+						<a  href="{{ collection.url }}"><span >{{ collection.name}}</span></a>												
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>					
+					<li>						
+						<strong ><span >{{ current_tags | join: ', ' }}</span></strong>											
+					</li>
+					{% else %}
+					<li><strong ><span>{%if collection.name == 'All' or collection.name == 'all'%}Tất cả sản phẩm{%else%} {{ collection.name }}{%endif%}</span></strong></li>
+						{% endif %}
+						{% elsif template contains 'addresses' %}
+					<li>
+						<a  href="/account" ><span >Tài khoản</span></a>
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>
+
+					<li><strong><span >Địa chỉ khách hàng</span></strong></li>
+					{% elsif template contains 'order' %}
+					<li>
+						<a  href="/account" ><span >Tài khoản</span></a>
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>
+
+					<li><strong ><span>Đơn hàng {{ order.name}}</span></strong></li>
+
+					{% elsif template == 'article' %}
+					<li >
+						<a  href="{{ blog.url }}"><span >{{ blog.name }}</span></a>	
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+					</li>
+					<li><strong><span >{{ article.title }}</span></strong></li>
+					{% elsif template == 'blog' %}
+					{% if current_tags %}
+
+					<li>
+						<a href="{{ blog.url }}" ><span>{{ blog.name }}</span></a>
+						<span class="mr_lr">&nbsp;/&nbsp;</span>
+
+					</li>
+					<li><strong><span>{{current_tags}}</span></strong></li>
+					{%else%}
+					<li><strong ><span>{{ blog.name }}</span></strong></li>
+					{%endif%}
+					{% elsif template contains 'search' %}<li><strong><span>Tìm kiếm</span></strong></li>
+					{% else %}
+					<li><strong ><span>{{ page_title }}</span></strong></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>

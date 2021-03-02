@@ -1,0 +1,28 @@
+<div class="blogwp">
+	<div class="blog-thumbnail">
+		{% if article.image != null %}
+		<a  class="image-blog" href="{{ article.url }}" title="{{ article.title }}">
+			<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{ article.image.src}}"  alt="{{ article.title }}">
+		</a>
+		{%else%}
+		<a class="image-blog" href="{{ article.url }}">
+			<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{ '360x225.png' | asset_url}}" alt="{{ article.title }}" title="{{ article.title }}"/>
+		</a>
+		{% endif %}
+	</div>
+	<div class="content_blog">
+		<h3>
+			<a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+		</h3>
+		<div class="blog-bottom">
+			<div class="post-date">
+				<div class="time-post">
+					<i class="fa fa-user"></i> <span>{{article.author}}</span>
+				</div>
+				<div class="time-post">
+					<i class="far fa-calendar"></i>&nbsp;{{ article.published_on | date:'dd/MM/yyy' }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

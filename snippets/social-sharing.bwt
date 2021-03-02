@@ -1,0 +1,44 @@
+{% if template contains 'article' or template contains 'blog' %}
+  {% capture permalinkURL %}https:{{ store.url }}{{ article.url }}{% endcapture %}
+  {% capture shareTitle %}{{ article.title | url_param_escape }}{% endcapture %}
+{% elsif template contains 'product' %}
+  {% capture permalinkURL %}https:{{ store.url }}{{ product.url }}{% endcapture %}
+  {% capture shareTitle %}{{ product.name | url_param_escape }}{% endcapture %}
+{% elsif template == 'password' %}
+  {% capture permalinkURL %}https:{{ store.url }}{% endcapture %}
+  {% capture shareTitle %}{% unless shop.description == blank %}{{ store.description | url_param_escape }}{% else %}{{ shop.name | url_param_escape }}{% endunless %}{% endcapture %}
+{% endif %}
+
+
+<div class="social-media" data-permalink="{{ permalinkURL }}">
+	<label>Chia sẻ: </label>
+	{% if settings.share_facebook %}
+	<a target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL | replace: '_',' '}}" class="share-facebook" title="Chia sẻ lên Facebook">
+		<i class="fab fa-facebook"></i>
+	</a>
+	{% endif %}
+
+	{% if settings.share_twitter %}
+	<a target="_blank" href="//twitter.com/share?text={{ shareTitle | replace '_',' ' }}&amp;url={{ permalinkURL | replace: '_',' '}}" class="share-twitter" title="Chia sẻ lên Twitter">
+		<i class="fab fa-twitter"></i>
+	</a>
+	{% endif %}
+
+	{% if settings.share_pinterest %}
+	<a target="_blank" href="//pinterest.com/pin/create/button/?url={{ permalinkURL | replace: '_',' '}}&amp;media=https:{% if template contains 'product' %}{{ product.featured_image.src | img_url: '1024x1024' }}{% else %}{{ article.image | img_url: '1024x1024' }}{% endif %}&amp;description={{ shareTitle | replace '_',' ' }}" class="share-pinterest" title="Chia sẻ lên pinterest">
+		<i class="fab fa-pinterest"></i>
+	</a>
+	{% endif %}
+
+	{% if settings.share_fancy %}
+	<a target="_blank" href="//fancy.com/fancyit?ItemURL={{ permalinkURL }}&amp;Title={{ shareTitle | replace: '_',' ' }}&amp;Category=Other&amp;ImageURL={% if template contains 'product' %}{{ product.featured_image.src | img_url: '1024x1024' }}{% else %}{{ article.image | img_url: '1024x1024' }}{% endif %}" class="share-fancy" title="Chia sẻ lên Fancy">
+		Fancy
+	</a>
+	{% endif %}
+
+	{% if settings.share_google %}
+	<a target="_blank" href="//plus.google.com/share?url={{ permalinkURL | replace: '_',' '}}" class="share-google" title="+1">
+		<i class="fab fa-google"></i>
+	</a>
+	{% endif %}
+</div>

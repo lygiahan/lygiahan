@@ -1,0 +1,21 @@
+<div class="mega-content">
+    <div class="level0-wrapper2">
+       <div class="nav-block nav-block-center">
+		   <ul class="level0">
+		   {% for l in linklists[link.alias].links %}
+			   {% if linklists[l.alias] != null %}
+			   <li class="level1 parent item"> <h2 class="h4"><a href="{{ l.url }}" title="{{ l.title }}">{{ l.title }}</a></h2> 
+				   <ul class="level1">
+					   {% for child_l in linklists[l.alias].links %}
+					   <li class="level2"><a href="{{ child_l.url }}" title="{{ child_l.title }}"><span>{{ child_l.title }}</span></a> </li>
+					   {% endfor %}
+				   </ul>
+			   </li>
+			   {% else %}
+			   <li class="level1 item"> <h2 class="h4"><a href="{{ l.url }}" title="{{ l.title }}"><span>{{ l.title }}</span></a> </h2>
+			  {% endif %}
+		   {% endfor %}
+		   </ul>
+	   </div>
+	 </div>
+</div>

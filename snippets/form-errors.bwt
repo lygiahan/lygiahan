@@ -1,0 +1,5 @@
+<div class="fw bg-danger margin-bottom-15 padding-15 ">
+	<div class="text-danger">
+		{{ form.errors | default_errors }}
+	</div>
+</div>

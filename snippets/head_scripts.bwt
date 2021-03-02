@@ -1,0 +1,12 @@
+{% include 'jquery' %}
+<!-- Bizweb javascript customer -->
+{% if template contains 'customer' %}
+{{ 'bizweb-api.js'  | bizweb_asset_url | script_tag }}
+{{ 'common.js' | bizweb_asset_url | script_tag }}   
+{{ 'customer.js'  | bizweb_asset_url | script_tag }}
+{% endif %}
+{%comment%}
+{% if template contains 'customer' %}
+{% include 'jquery-validate' %}
+{% endif %}
+{%endcomment%}

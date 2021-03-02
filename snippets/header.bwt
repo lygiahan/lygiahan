@@ -1,0 +1,182 @@
+<header class="header header_menu">
+	<div class="topbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-6 col-md-7 contact_header">
+					<span>
+						Hotline: <a href="tel:{{settings.phone_header | default: store.phone_number | remove: ' '}}">{{settings.phone_header | default: store.phone_number}}</a>
+					</span>
+					<span class="mobile">
+						Email: <a href="mailto:{{settings.email_header | default:store.customer_email }}">{{settings.email_header | default:store.customer_email }}</a>
+					</span>
+				</div>
+				<div class="col-6 col-md-5">
+					<ul class="account_header">
+						{% if customer %}
+						<li>
+							<a href="/account/logout">Đăng xuất</a>
+						</li>
+						<li>
+							<a href="/account">Tài khoản</a>
+						</li>
+						{%else%}
+						<li>
+							<a href="/account/register">Đăng ký</a>
+						</li>
+						<li>
+							<a href="/account/login">Đăng nhập</a>
+						</li>
+						{%endif%}
+						<li class="mobile">
+							<a href="/lien-he">Liên hệ</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mid-header wid_100">
+		<div class="container">
+			<div class="menu-bar-mobile menu-bar-h nav-mobile-button">
+				<div class="menu-bar">
+					<i class="fa fa-align-justify"></i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 col-12">
+					<div class="logo_center">
+						<div class="logo">
+							{% if settings.logo_use_image %}
+							<a href="/" class="logo-wrapper ">	
+								<img src="{{ 'logo.png' | asset_url }}" alt="logo {{ store.name }}">
+							</a>
+							{% else %}
+							<a href="/">{{ store.name }}</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="header-menu clearfix">
+	<div class="container">
+		<div class="row">
+			<div class="col-10">
+				{%include 'site-nav-2'%}
+			</div>
+			<div class="col-12 col-sm-2">
+				<div class="header-right inline-block">
+					<div class="cartgroup">
+						<div class="top-cart-contain">
+							<div class="mini-cart text-xs-center">
+								<a class="img_hover_cart" href="/cart" title="Giỏ hàng">
+									<i class="fa fa-shopping-bag"></i>
+									<span class="count_item count_item_pr"></span>
+								</a>
+								<div class="top-cart-content">					
+									<ul id="cart-sidebar" class="mini-products-list count_li">
+										<li class="list-item">
+											<ul></ul>
+										</li>
+										<li class="action">
+											<ul>
+												<li class="li-fix-1">
+													<div class="top-subtotal">
+														Tổng tiền thanh toán: 
+														<span class="price"></span>
+													</div>
+												</li>
+												<li class="li-fix-2" style="">
+													<div class="actions">
+														<a href="/cart" class="btn btn-primary" title="Giỏ hàng">
+															<span>Giỏ hàng</span>
+														</a>
+													</div>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="header_search">
+							<div class="icon-search-mobile ">
+								<i class="fa fa-search"></i>
+							</div>
+							<form action="/search" method="get" class="input-group search-bar" role="search">
+								<input type="hidden" name="type" value="product">
+								<input type="text" name="query" value="{{ search.terms | escape }}" autocomplete="off" placeholder="Tìm kiếm sản phẩm..." class="input-group-field auto-search" required="">
+								<span class="input-group-btn">
+									<button type="submit" class="btn icon-fallback-text">
+										<span class="fa fa-search" ></span>      
+									</button>
+								</span>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Menu mobile -->
+<div class="menu_mobile sidenav max_991" id="mySidenav">
+	<ul class="ul_collections">
+		<li class="special">
+			<a href="/collections/all">Tất cả danh mục</a>
+		</li>
+		{% for link in linklists[settings.main_menu].links %}
+		<li class="level0 level-top parent {% if link.active %} active {%endif%}">
+			<a href="{{ link.url }}">
+				{{ link.title }}
+			</a>
+			{% if linklists[link.alias] != null %}
+			<i class="fa fa-angle-down"></i>
+			<ul class="level0" style="display:none;">
+				{% for childlink in linklists[link.alias].links %}
+				<li class="level1 {% if childlink.active %} active {%endif%}"> 
+					<a href="{{ childlink.url }}"> <span>{{ childlink.title }}</span> </a>
+					{% if linklists[childlink.alias] != null %}
+					<i class="fa fa-angle-down"></i>
+					<ul class="level1" style="display:none;">
+						{% for childlink2 in linklists[childlink.alias].links %}
+						<li class="level2 {% if childlink2.active %} active {%endif%}">
+							<a href="{{ childlink2.url }}"><span>{{ childlink2.title }}</span></a>
+							{% if linklists[childlink2.alias] != null %}
+							<i class="fa fa-angle-down"></i>
+							<ul class="level2" style="display:none;">
+								{% for childlink3 in linklists[childlink2.alias].links %}
+								<li class="level3 {% if childlink3.active %} active {%endif%}">
+									<a href="{{ childlink3.url }}"><span>{{ childlink3.title }}</span></a>
+								</li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+						</li>
+						{% endfor %}
+					</ul>
+					{%endif%}
+				</li>
+				{% endfor %}
+			</ul>
+			{%endif%}
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+<div id="menu-overlay" class=""></div>

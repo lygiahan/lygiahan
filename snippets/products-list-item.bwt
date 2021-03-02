@@ -1,0 +1,17 @@
+<section class="products-view products-view-grid collection_reponsive list_hover_pro">
+	<div class="row">
+		{% for product in collection.products %}
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 product-col">
+			<div class="item_product_main listoffice">
+				{%include 'product_list_office'%}	
+			</div>
+		</div>			
+		{% endfor %}
+	</div>
+	<div class="section pagenav">
+		{% if paginate.pages > 1 %}
+		{% include 'collection-paginate-pages' %}
+		{% endif %}
+	</div>
+
+</section>

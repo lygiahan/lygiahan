@@ -1,0 +1,36 @@
+<nav class="clearfix relative nav_pagi w_100">
+	<ul class="pagination clearfix">
+		{% if paginate.previous %}
+		<li class="page-item hidden-xs"><a class="page-link" onclick="doSearch({{ paginate.current_page | minus: 1 }})" href="javascript:;"><i class="fa fa-angle-left" aria-hidden="true"></i>
+			</a></li>
+		{% else %}  
+		<li class="page-item disabled"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
+		{% endif %}
+
+		{% for part in paginate.parts %}
+		{% if part.is_link %}
+		<li class="page-item"><a class="page-link" onclick="doSearch({{ part.title }})" href="javascript:;">{{ part.title }}</a></li>
+		{% else %}
+		{% if part.title == paginate.current_page %}
+		<li class="active page-item disabled"><a class="page-link" href="javascript:;">{{ part.title }}</a></li>
+		{% else %}
+		<li class="page-item"><a class="page-link" href="javascript:;">{{ part.title }}</a></li>
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+
+		{% if paginate.next %}
+		<li class="page-item hidden-xs"><a class="page-link" onclick="doSearch({{ paginate.current_page | plus: 1 }})" href="javascript:;"><i class="fa fa-angle-right" aria-hidden="true"></i>
+			</a></li>
+		{% else %}
+		<li class="page-item disabled"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
+		{% endif %}
+	</ul>
+</nav>
+<script>
+{%if paginate.current_page > 0%}
+var cuPage = {{paginate.current_page}}
+	{%else%}
+	var cuPage = 0
+	{%endif%}
+</script>

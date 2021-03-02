@@ -1,0 +1,164 @@
+{% assign social = settings.fot_social %}
+{% assign c1_title = settings.fot_c1_title %}
+{% assign c2_title = settings.fot_c2_title %}
+{% assign c2_menu = settings.fot_menu2 %}
+{% assign c3_title = settings.fot_c3_title %}
+{% assign c3_menu = settings.fot_menu3 %}
+{% assign c4_title = settings.fot_c4_title %}
+{% assign c4_menu = settings.fot_menu4 %}
+{% assign c5_title = settings.fot_c5_title %}
+{% assign copyright = settings.copyright %}
+{% assign btt = settings.backtotop_enable %}
+
+<footer class="footer">
+	<div class="mid-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-6 col-lg-2 footer-click">
+					<h4 class="title-menu clicked">
+						{{c1_title}} 
+					</h4>
+					<ul class="list-menu toggle-mn" style="display:none;">
+						{% for link in linklists[c2_menu].links %}
+						<li class="li_menu">
+							<a href="{{ link.url }}">{{ link.title }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-3 footer-click">
+					<h4 class="title-menu clicked">
+						{{c2_title}}
+					</h4>
+					<ul class="list-menu toggle-mn" style="display:none;">
+						{% for link in linklists[c3_menu].links %}
+						<li class="li_menu">
+							<a href="{{ link.url }}">{{ link.title }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-3 footer-click">
+					<h4 class="title-menu clicked">
+						{{c3_title}} 
+					</h4>
+					<ul class="list-menu toggle-mn" style="display:none;">
+						{% for link in linklists[c4_menu].links %}
+						<li class="li_menu">
+							<a href="{{ link.url }}">{{ link.title }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-4 footer-click">
+					<h4 class="title-menu {%if settings.use_newsletter%}clickedfalse{%else%}clicked{%endif%}">
+						{{c4_title}}
+					</h4>
+					{%if settings.use_newsletter%}
+					<div class="form_register">
+						<form id="mc-form" class="newsletter-form" data-toggle="validator">
+							<input aria-label="Địa chỉ Email" type="email" placeholder="Nhập địa chỉ email"  name="EMAIL" required autocomplete="off" >
+							<button class="button_subscribe subscribe" type="submit" aria-label="Đăng ký nhận tin" name="subscribe">Đăng ký</button>
+						</form>
+						<div class="mailchimp-alerts ">
+							<div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+							<div class="mailchimp-success"></div><!-- mailchimp-success end -->
+							<div class="mailchimp-error"></div><!-- mailchimp-error end -->
+						</div>
+					</div>
+					<script>
+						$('#mc-form').ajaxChimp({
+							language: 'en',
+							callback: mailChimpResponse,
+							url: '{{ settings.newsletter_form_action }}'
+						});
+						function mailChimpResponse(resp) {
+							if (resp.result === 'success') {
+								if(resp.msg == 'Thank you for subscribing!'){
+									$('.mailchimp-success').html('Cảm ơn bạn đã đăng ký!').fadeIn(900);
+								}else{
+									$('.mailchimp-success').html('' + resp.msg).fadeIn(900);
+								}
+								$('.mailchimp-error').fadeOut(100);
+							} else if (resp.result === 'error') {
+								if(resp.msg == '0 - Please enter a value'){
+									$('.mailchimp-error').html('Vui lòng nhập các trường thông tin').fadeIn(900);
+								}else if(resp.msg == '0 - An email address must contain a single @'){
+									$('.mailchimp-error').html('Địa chỉ email phải chứa ký tự @').fadeIn(900);
+								}else if(resp.msg == 'This email cannot be added to this list. Please enter a different email address.'){
+									$('.mailchimp-error').html('Email này không thể được thêm vào danh sách này. Vui lòng nhập một địa chỉ email khác.').fadeIn(900);
+								}else if(resp.msg.includes('0 - The domain portion of the email address is invalid')){
+									$('.mailchimp-error').html('Phần tên miền của địa chỉ email không hợp lệ').fadeIn(900);
+								}else if(resp.msg.includes('0 - The username portion of the email address is empty')){
+									$('.mailchimp-error').html('Phần tên người dùng của địa chỉ email trống').fadeIn(900);
+								}else if(resp.msg.includes('0 - The username portion of the email address is invalid')){
+									$('.mailchimp-error').html('Phần tên người dùng của địa chỉ email không hợp lệ').fadeIn(900);
+								}else if(resp.msg == 'Thank you for subscribing!'){
+									$('.mailchimp-error').html('Cảm ơn bạn đã đăng ký!').fadeIn(900);
+								}else{
+									$('.mailchimp-error').html('' + resp.msg).fadeIn(900);
+								}
+							}
+						}
+					</script>
+					{%else%}
+					<ul class="list-menu toggle-mn" style="display:none;">
+						{% for link in linklists[c4_menu].links %}
+						<li class="li_menu">
+							<a href="{{ link.url }}">{{ link.title }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					{%endif%}
+					<div class="social-footer">
+						<h4 class="title-menu">
+							{{c5_title}} 
+						</h4>
+						<ul class="follow_option">	
+							{% if settings.social_facebook_link != blank %}
+							<li>
+								<a class="facebook" href="{{settings.social_facebook_link}}" title="Theo dõi Facebook {{store.name}}"><i class="fab fa-facebook-f"></i></a>
+							</li>
+							{% endif %}
+							{% if settings.social_twitter_link != blank %}
+							<li>
+								<a class="twitter" href="{{settings.social_twitter_link}}" title="Theo dõi Twitter {{store.name}}"><i class="fab fa-twitter"></i></a>
+							</li>
+							{% endif %}
+							{% if settings.social_behance_link != blank %}
+							<li>
+								<a class="behance" href="{{settings.social_behance_link}}" title="Theo dõi Behance {{store.name}}"><i class="fab fa-behance"></i></a>
+							</li>
+							{% endif %}
+							{% if settings.social_instagram_link != blank %}
+							<li>
+								<a class="instgram" href="{{settings.social_instagram_link}}" title="Theo dõi instgram {{store.name}}"><i class="fab fa-instagram"></i></a>
+							</li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bg-footer-bottom copyright clearfix">
+		<div class="container">
+			<div class="row tablet">
+				<div id="copyright" class="col-lg-12 col-md-12 col-xs-12 fot_copyright">
+					<span class="wsp">
+						{%if template contains 'index'%}
+						<span class="opacity1">Cung cấp bởi</span>
+						<a href="https://www.sapo.vn/?utm_campaign=cpn:site_khach_hang-plm:footer&utm_source=site_khach_hang&utm_medium=referral&utm_content=fm:text_link-km:-sz:&utm_term=&campaign=site_khach_hang" rel="nofollow" title="Sapo" target="_blank">Sapo</a>
+						{%else%}
+						<span class="opacity1">Cung cấp bởi</span>
+						<a href="javascript:;">Sapo</a>
+						{%endif%}
+					</span>
+				</div>
+			</div>
+			{% if btt %}
+			<a href="#" id="back-to-top" class="backtop"  title="Lên đầu trang"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+			{% endif %}
+		</div>
+	</div>
+</footer>

@@ -1,0 +1,19 @@
+{% layout none %}
+{% assign module_product_count = collection.products_count %}
+<div>
+	{% if collection.products.size == 0 %}
+	<div class="a-center margin-bottom-30" >
+		Hiện tại chưa có sản phẩm nào trong danh mục này!...
+	</div>
+	{% else %}
+	<div class="slicktab slick-product">
+		{% for product in collection.products limit: settings.tab_limit %}
+		<div class="item">
+			<div class="item_product_main itemcustome">
+				{%include 'product_grid_office'%}
+			</div>
+		</div>
+		{%endfor%}
+	</div>
+	{%endif%}
+</div>

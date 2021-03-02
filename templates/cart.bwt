@@ -1,0 +1,42 @@
+{% include 'breadcrumb' %} 
+<section class="main-cart-page main-container col1-layout">
+	<div class="main container cartpcstyle">
+		<div class="wrap_background_aside margin-bottom-40">
+			<div class="header-cart">
+				<h1 class="title_cart">
+					<span>Giỏ hàng của bạn</span>
+				</h1>
+				<div class="header-cart title_cart_pc hidden-sm hidden-xs">
+
+				</div>
+			</div>
+			<div class="col-main cart_desktop_page cart-page">
+
+			</div>
+		</div>
+	</div>
+	<div class="wrap_background_aside padding-top-15 margin-bottom-40 padding-left-0 padding-right-0 cartmbstyle">
+		<div class="cart-mobile container">
+			<form action="/cart" method="post" novalidate="" class="margin-bottom-0">
+				<div class="header-cart">
+					{% if cart.item_count > 0 %}
+					<div class="title-cart title_cart_mobile">
+						<h3>Giỏ hàng</h3>
+					</div>
+					{% else %}
+					<div class="title-cart">
+						<h3>Giỏ hàng</h3><p>(Chưa có sản phẩm nào) nhấn vào <a href="/collections/all">cửa hàng</a> để mua hàng</p>
+					</div>
+					{% endif %}
+				</div>
+
+				<div class="header-cart-content">
+
+
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+</section>

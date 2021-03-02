@@ -1,0 +1,8 @@
+{%layout none%}
+
+<link rel="stylesheet" href="//bizweb.dktcdn.net/100/183/481/themes/694725/assets/guide_documenter_style.css" media="all">
+<script src="//bizweb.dktcdn.net/100/183/481/themes/694725/assets/guide_jquery.js"></script>
+<script src="//bizweb.dktcdn.net/100/183/481/themes/694725/assets/guide_jquery-scrollto.js"></script>
+<script src="//bizweb.dktcdn.net/100/183/481/themes/694725/assets/guide_jquery-easing.js"></script>
+<script src="//bizweb.dktcdn.net/100/183/481/themes/694725/assets/guide_script.js"></script>
+{{page.content}}

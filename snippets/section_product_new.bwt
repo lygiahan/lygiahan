@@ -1,0 +1,21 @@
+<section class="section_product_new">
+	<div class="container">
+		<div class="title_module_main">
+			<h2 class="h2">
+				<a href="{{settings.section_new_url}}" title="{{settings.section_new_title}}">{{settings.section_new_title}}</a>
+			</h2>
+		</div>
+		{% assign product_count = collections[settings.section_new_url]products_count %}
+		{% if product_count >= 1 %}
+		<div class="slick-new">
+			{% for product in collections[settings.section_new_url].products limit: {{settings.section_new_limit}}%}
+			<div class="item_product_main">
+				{% include 'product_grid_office' %}
+			</div>
+			{%endfor%}
+		</div>
+		{%else%}
+		<p class="a-center margin-top-15">Hiện tại chưa có sản phẩm nào trong danh mục này!...</p>
+		{%endif%}
+	</div>
+</section>

@@ -1,0 +1,24 @@
+<div class="section_slider clearfix">
+	<div class="home-slider">
+		{%for s2 in (1..5)%}
+		{%capture enable_slide-%}slider_{{s2}}_enable{%endcapture%}
+		{%capture naviimage-%}slider_{{s2}}.jpg{%endcapture%}
+		{%capture url-%}slider_{{s2}}_url{%endcapture%}
+		{%capture alt-%}slider_{{s2}}_alt{%endcapture%}
+		{%if settings[enable_slide]%}
+		<div class="items">
+			<a href="{{ settings[url]}}" title="{{ settings[alt] }}">
+				<picture>
+					<source media="(max-width: 480px)" srcset="{{ naviimage | asset_url | img_url:'large' }}">
+					<source media="(min-width: 481px) and (max-width: 600px)" srcset="{{ naviimage | asset_url }}">
+					<source media="(min-width: 601px) and (max-width: 1023px)" srcset="{{ naviimage | asset_url }}">
+					<source media="(min-width: 1024px) and (max-width: 1199px)" srcset="{{ naviimage | asset_url  }}">
+					<source media="(min-width: 1200px)" srcset="{{ naviimage | asset_url  }}">
+					<img class="lazyload" src="{{ naviimage | asset_url  }}" alt="{{ settings[alt] }}"/>
+				</picture>
+			</a>
+		</div>
+		{%endif%}
+		{%endfor%}
+	</div>
+</div>

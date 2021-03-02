@@ -1,0 +1,41 @@
+<div class="wrap_main d-none d-lg-block d-xl-block">
+	<div class="bg-header-nav">
+		<div class= "rows row-noGutter-2">
+			<nav class="header-nav">
+				<ul class="item_big">
+					{% for link in linklists[settings.main_menu].links %}
+					{% if linklists[link.alias] != null %}
+					<li class="nav-item {%if link.active%} active {%endif%}">
+						<a class="a-img" href="{{ link.url }}" title="{{ link.title }}">
+							<span>{{ link.title }}{% if linklists[link.alias].links %}<i class="fa fa-caret-down"></i>{% endif %}</span>
+						</a>
+						<ul class="item_small">
+							{% for link_child in linklists[link.alias].links %}
+							<li>
+								<a href="{{ link_child.url }}" title="{{ link_child.title }}">{{ link_child.title }} {% if linklists[link_child.alias].links %}<i class="fa fa-angle-right"></i>{% endif %}</a>
+								{% if linklists[link_child.alias].links %}
+								<ul>
+									{% for link_child2 in linklists[link_child.alias].links %}
+									<li>
+										<a href="{{ link_child2.url }}" title="{{ link_child2.title }}" class="a3">{{ link_child2.title }}</a>
+									</li>
+									{% endfor %}
+								</ul>
+								{% endif %}
+							</li>
+							{% endfor %}
+						</ul>
+					</li>
+					{% else %}
+					<li class="nav-item {%if link.active %} active {% endif %}">	
+						<a class="a-img" href="{{ link.url }}" title="{{ link.title }}">
+							<span>{{ link.title }}</span>
+						</a>
+					</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>

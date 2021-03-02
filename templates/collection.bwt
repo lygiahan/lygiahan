@@ -1,0 +1,54 @@
+{% include 'breadcrumb' %} 
+<div class="section wrap_background">
+	<div class="container ">
+		<div class="bg_collection section">
+			<div class="row">
+				<div class="main_container collection col-xl-9 col-lg-9 col-md-12 col-sm-12">
+
+					<h1 class="title_page collection-title">
+						{%if page_title == 'All'%}Tất cả sản phẩm{%else%}{{ page_title }}{%endif%}
+					</h1>
+					<div class="category-products products">
+						{% if collection.products.size > 0 %}
+						<div class="border-bottom">
+							{%include 'collection-sortby'%}
+						</div>
+						{%endif%}
+						{% paginate collection.products by settings.collection_number_product %}
+
+						{% if collection.products.size > 0 %}
+						{%include 'products-grid-item'%}
+						{% else %}
+						<div class="section">
+							<div class="alert alert-warning alert-dismissible margin-top-15 section" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+								Sản phẩm đang được cập nhật.
+							</div>
+						</div>
+						{% endif %}
+						{% endpaginate %}
+					</div>
+					<div id="open-filters" class="open-filters hidden-lg">
+						<i class="fa fa-filter"></i>
+						<span>Lọc</span>
+					</div>
+				</div>
+				<aside class="dqdt-sidebar sidebar left-content col-xl-3 col-lg-3 col-md-12 col-sm-12">
+					<div class="wrap_background_aside asidecollection">
+						{%include 'aside-collection'%}
+					</div>
+				</aside>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var colName = "{%if page_title == 'All'%}Tất cả sản phẩm{%else%}{{ page_title }}{%endif%}";
+	{% if collection.id > 0 %}
+	var colId = {{collection.id}};
+	{%else%}
+	var colId = 0;
+	{%endif%}
+
+	var selectedViewData = "{% if template contains '.list' %}data_list{% else %}data{% endif %}";
+</script>

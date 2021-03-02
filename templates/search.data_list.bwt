@@ -1,0 +1,33 @@
+{% layout none %}
+<div class="category-products">
+	<div class="section">
+		{%include 'collection-sortby'%}
+	</div>
+	{% paginate search.results by settings.collection_number_product %}	
+	{% if search.results.size > 0 %}
+	<section class="products-view products-view-grid collection_reponsive list_hover_pro">
+		<div class="row">
+			{% for product in search.results %}
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="item_product_main listoffice item_product_main_relative">
+					{%include 'product_list_office'%}	
+				</div>
+			</div>	
+			{% endfor %}
+		</div>
+	</section>
+	{% else %}
+	<div class="alert alert-warning green-alert section" role="alert">
+		<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		Không có sản phẩm nào trong danh mục này.
+	</div>
+	{% endif %}
+	{% if paginate.pages > 1 %}
+	<div class="section pagenav">
+		{% if paginate.pages > 1 %}
+		{% include 'collection-paginate-pages' %}
+		{% endif %}
+	</div>
+	{%endif%}
+	{% endpaginate %}
+</div>

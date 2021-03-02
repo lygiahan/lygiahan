@@ -1,0 +1,264 @@
+<div class="filter-content aside-filter">
+	<div class="filter-container">	
+		<div class="filter-container__selected-filter" style="display: none;">
+			<div class="filter-container__selected-filter-header clearfix">
+				<span class="filter-container__selected-filter-header-title"><i class="fa fa-arrow-left hidden-sm-up"></i> Bạn chọn</span>
+				<a href="javascript:void(0)" onclick="clearAllFiltered()" class="filter-container__clear-all">Bỏ hết <i class="fa fa-angle-right"></i></a>
+			</div>
+			<div class="filter-container__selected-filter-list">
+				<ul></ul>
+			</div>
+		</div>
+		<!-- Lọc Hãng -->
+		{% if settings.filter_vendor %}
+		{%assign vendors = collection.all_vendors.size%}
+		{%if vendors > 1%}
+		<aside class="aside-item filter-vendor">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0"><span>{{settings.filter_vendor_title}}</span></h2>
+			</div>
+			<div class="aside-content filter-group">
+				<ul>
+					{% for vendor in collection.all_vendors %}
+					{%if vendor != ''%}
+					<li class="filter-item filter-item--check-box filter-item--green ">
+						<span>
+							<label for="filter-{{ vendor | handleize }}">
+								<input type="checkbox" id="filter-{{ vendor | handleize }}"  data-group="PRODUCT_VENDOR" data-field="vendor.filter_key" data-text="{{ vendor.filter_key }}" value="(&#34;{{ vendor }}&#34;)" data-operator="OR">
+								<i class="fa"></i>
+								{{ vendor }}
+							</label>
+						</span>
+					</li>
+					{%endif%}
+					{% endfor %}
+				</ul>
+			</div>
+		</aside>
+		{%endif%}
+		{%endif%}
+
+		<!-- Lọc theo Tag (Màu sắc)-->
+		{%- if settings.filter_tag1 -%}
+		{%-if settings.filter_tag1_style == 'input'-%}
+		<aside class="aside-item filter-tag-style-1">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0"><span>{{settings.filter_tag1_title}}</span></h2>
+			</div>
+			<div class="aside-content filter-group">
+				<ul>
+					{%- assign tags = settings.filter_tag1_list | split: ';' -%} 
+					{%- for t in tags -%}
+					{%- assign tag = t | strip -%}
+					{%- assign tag_value = tag | handleize -%}
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ tag | handleize }}">
+								<input type="checkbox" id="filter-{{ tag | handleize }}" data-group="tag1" data-field="tags" data-text="{{tag}}" value="({{tag}})" data-operator="OR">
+								<i class="fa"></i>
+								{{tag}}
+							</label>
+						</span>
+					</li>	
+					{%-endfor-%}
+
+				</ul>
+			</div>
+		</aside>
+		{%-else-%}
+		<aside class="aside-item filter-tag-style-1">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0"><span>{{settings.filter_tag1_title}}</span></h2>
+			</div>
+			<div class="aside-content filter-group clearfix">
+				<ul style="overflow: visible;">
+					{%- assign tags = settings.filter_tag1_list | split: ';' -%} 
+					{%- assign color_list = settings.filter_tag1_list_color | split:";" -%}
+
+					{%- for t in tags -%}
+					{%-assign fl1 = forloop.index-%}
+					{%-for color in color_list-%}
+					{%-if forloop.index == fl1-%}
+					{%-assign cl = color-%}
+					{%-endif-%}
+					{%-endfor-%}
+					{%- assign tag = t | strip -%}
+					{%- assign tag_value = tag | handleize -%}
+					<li class="filter-item color filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ tag | handleize }}">
+								<input type="checkbox" id="filter-{{ tag | handleize }}"  data-group="tag1" data-field="tags" data-text="{{tag}}" value="({{tag}})" data-operator="OR">
+								<i class="fa {{ tag | handleize }}" style="background-color:{{cl}};{%-if tag_value == 'trang'-%}border:1px solid #ebebeb;{%-endif-%}"></i>
+								{{tag}}
+							</label>
+						</span>
+					</li>	
+					{%-endfor-%}
+
+				</ul>
+			</div>
+		</aside>
+		{%-endif-%}
+		{%-endif-%}
+		<!-- End Lọc theo Tag (Màu sắc)-->
+		{% if settings.filter_price %}
+		{%if settings.filter_style == 'slider'%}
+
+		{{ 'jquery-ui.min.css' | asset_url | stylesheet_tag }}
+		{{ 'jquery-ui-min.js' | asset_url | script_tag }}	
+
+		<aside class="aside-item filter-price">
+
+			<div class="aside-title aside-title-fillter">
+				<div class="title_module border_bottom_10"><h2><span>{{ settings.filter_price_title }}</span></h2></div>
+			</div>
+			<div class="aside-content filter-groupi filter-ui-slider">			
+				{% assign testStringAsNumeric = settings.filter_price_max | times: 1 %}
+				<div id='slider'></div>
+				<span class="price_val">Từ:</span>
+				<div id='start'><input value="{{0}}"></div>		
+				<div id='stop'><input value="{{testStringAsNumeric|money}}"></div>
+				<a id="old-value" href="javascript:;"></a>
+				<a id="filter-value" class="btn btn-primary" href="javascript:;" onclick="_toggleFilterdqdt(this);"  data-value="(>-1 AND <{{settings.filter_price_max | plus:1}})" >Lọc giá</a>
+
+			</div>
+		</aside>
+
+		{%else%}
+		<aside class="aside-item filter-price dq-filterxx">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0"><span>{{settings.filter_price_title}}</span></h2>
+			</div>
+			<div class="aside-content filter-group">
+				<div class="showstt">
+					<span>Mức giá</span>
+				</div>
+				<ul style="display: none;">
+					{% assign tags = settings.filter_price_node | split: ';' %}
+					{% for t in tags %}
+					{% assign tag = t | strip %}
+					{% assign tag_value = tag | handleize %}
+					{%if forloop.index == 1%}
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-duoi-{{tag | handleize }}">
+								<input type="checkbox" id="filter-duoi-{{tag | handleize }}" onchange="" data-group="Khoảng giá" data-field="price_min" data-text="Dưới {{tag}}" value="(<{{ tag | replace: '.' | replace: 'đ' }})" data-operator="OR">
+								<i class="fa hidden"></i>
+								Giá dưới {{tag}}
+							</label>
+						</span>
+					</li>
+					{%elsif forloop.index == forloop.length%}
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ tagold | handleize }}-{{ tag | handleize }}">
+								<input type="checkbox" id="filter-{{ tagold | handleize }}-{{ tag | handleize }}" onchange="" data-group="Khoảng giá" data-field="price_min" data-text="{{tagold}} - {{tag}}" value="(>={{ tagold | replace: '.' | replace: 'đ' }} AND <={{ tag | replace: '.' | replace: 'đ' }})" data-operator="AND">
+								<i class="fa hidden"></i>
+								{{tagold}} - {{tag}}
+							</label>
+						</span>
+					</li>
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-tren{{ tag | handleize }}">
+								<input type="checkbox" id="filter-tren{{ tag | handleize }}" onchange="" data-group="Khoảng giá" data-field="price_min" data-text="Trên {{tag}}" value="(>={{ tag | replace: '.' | replace: 'đ' }})" data-operator="AND">
+								<i class="fa hidden"></i>
+								Giá trên {{tag}}
+							</label>
+						</span>
+					</li>
+					{%else%}
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ tagold | handleize }}-{{ tag | handleize }}">
+								<input type="checkbox" id="filter-{{ tagold | handleize }}-{{ tag | handleize }}" onchange="" data-group="Khoảng giá" data-field="price_min" data-text="{{tagold}} - {{tag}}" value="(>={{ tagold | replace: '.' | replace: 'đ' }} AND <={{ tag | replace: '.' | replace: 'đ' }})" data-operator="AND">
+								<i class="fa hidden"></i>
+								{{tagold}} - {{tag}}
+							</label>
+						</span>
+					</li>
+					{%endif%}
+					{% assign tagold = tag %}
+					{%endfor%}
+				</ul>
+				<script>
+
+
+
+					$('.showstt').click(function(){
+						$(this).parent().find('ul').slideToggle();
+					})
+					$('.dq-filterxx input').change(function(){
+						$(this).parents('.dq-filterxx').find('ul').slideToggle();
+						var text = $(this).attr('data-text');
+						var value = $(this).attr('value');
+						console.log(value);
+						$('.showstt span').text(text);
+						$('.showstt').attr('value', value);
+
+					})
+				</script>
+			</div>
+		</aside>
+		{%endif%}
+		{%endif%}
+		{%comment%}
+		<!-- Lọc Loại -->
+		{% if settings.filter_type %}
+		{%assign typers = collection.all_types.size%}
+		{%if typers > 1%}
+		<aside class="aside-item aside-itemxx filter-type">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0"><span>{{settings.filter_type_title}}</span></h2>
+			</div>
+			<div class="aside-content filter-group">
+				<ul>
+					{%- for type in collection.all_types -%}
+					{%-if type != ''-%}
+					<li class="filter-item filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ type | handleize }}">
+								<input type="checkbox" id="filter-{{ type | handleize }}"  data-group="PRODUCT_TYPE" data-field="product_type.filter_key" data-text="{{ product_type.filter_key }}" value="(&#34;{{ type }}&#34;)" data-operator="OR">
+								<i class="fa"></i>
+								{{ type }}
+							</label>
+						</span>
+					</li>
+					{%-endif-%}
+					{% endfor %}
+				</ul>
+			</div>
+		</aside>
+		{%-endif-%}
+		{%-endif-%}
+		<!-- End Lọc Loại -->
+		{%- if settings.filter_tag2 -%}
+		<aside class="aside-item sidebar-item filter-tag-style-1">
+			<div class="aside-title">
+				<h2 class="title-head margin-top-0">
+					<span>{{ settings.filter_tag2_title }}</span>
+				</h2>
+			</div>
+			<div class="module-content aside-content filter-group">	
+				<ul>
+					{% assign tags = settings.filter_tag2_list | split: ';' %} 
+					{% for t in tags %}
+					{% assign tag = t | strip -%}
+					{% assign tag_value = tag | handleize %}
+					<li class="filter-item filter_size filter-item--check-box filter-item--green">
+						<span>
+							<label for="filter-{{ tag | handleize }}">
+								<input type="checkbox" id="filter-{{ tag | handleize }}" data-group="tag2" data-field="tags" data-text="{{ tag }}" value="({{ tag }})" data-operator="OR">
+								<i class="fa"></i>
+								{{ tag }}
+							</label>
+						</span>
+					</li>	
+					{% endfor %}
+				</ul>
+			</div>
+		</aside>
+		{% endif %}	
+		{%endcomment%}
+	</div>
+</div>

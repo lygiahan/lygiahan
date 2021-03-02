@@ -1,0 +1,37 @@
+<div id="popup-cart" class="popcart">
+	<div id="popup-cart-desktop" class="clearfix">
+		<div class="title-popup-cart">
+			<img src="{{'ico_check_.png' | asset_url}}"  alt="{{store.name}}"/> <span class="your_product"> Bạn đã thêm [<span class="cart-popup-name" style="color: red;"></span>] vào giỏ hàng</span>
+		</div>          
+		<div class="wrap_popup">
+			<div class="title-quantity-popup" >
+				<span class="cart_status" onclick="window.location.href='/cart';">
+					Giỏ hàng của bạn có <span class="cart-popup-count"></span> sản phẩm
+				</span>
+			</div>
+			<div class="content-popup-cart">
+				<div class="thead-popup">
+					<div style="width: 53%;" class="text-left">Sản phẩm</div>
+					<div style="width: 15%;" class="text-center">Đơn giá</div>
+					<div style="width: 15%;" class="text-center">Số lượng</div>
+					<div style="width: 17%;" class="text-center">Thành tiền</div>
+				</div>
+				<div class="tbody-popup scrollbar-dynamic">
+				</div>
+				<div class="tfoot-popup">
+					<div class="tfoot-popup-1 clearfix">
+						<div class="popup-ship">
+						</div>
+						<span class="total-p popup-total">Tổng tiền thanh toán: <span class="total-price"></span></span>
+					</div>
+					<div class="tfoot-popup-2 clearfix">
+						<a class="button btn-continue close-pop" title="Tiếp tục mua hàng" href="javascript:;" onclick="$('#popup-cart').modal('hide');"><span><span>Tiếp tục mua hàng</span></span></a>
+						<a class="button checkout_ btn-proceed-checkout" title="Thực hiện thanh toán" href="/checkout"><span>Thực hiện thanh toán</span></a>
+					</div>
+				</div>
+			</div>
+			<a title="Close" class="close-modal quickview-close close-pop" href="javascript:;" onclick="$('#popup-cart').modal('hide');"><i class="fa fa-close"></i></a>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,39 @@
+<div id="sapo-product-reviews" class="sapo-product-reviews" data-id="{{ product.id }}">
+    <div id="sapo-product-reviews-noitem" style="display: none;">
+        <div class="content">
+            <p data-content-text="language.suggest_noitem"></p>
+            <div class="product-reviews-summary-actions">
+                <button type="button" class="btn-new-review" onclick="BPR.newReview(this); return false;" data-content-str="language.newreview"></button>
+            </div>
+            <div id="noitem-bpr-form_" data-id="formId" class="noitem-bpr-form" style="display:none;"><div class="sapo-product-reviews-form"></div></div>
+        </div>
+    </div>
+    {% if product.metafields.bpr.votes > 0 %}
+    <div id="sapo-product-reviews-sub" style="display: none;">
+        <div class="sapo-product-reviews-summary" style="display: none;">
+            <div class="sapo-product-reviews-action">
+                <meta itemprop="name" content="{{ product.name }}" />
+                <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" class="bpr-summary">
+                    <meta content="5" itemprop="bestRating" />
+                    <meta content="1" itemprop="worstRating" />
+                    <div class="bpr-summary-average">
+                        <span itemprop="ratingValue">{{ product.metafields.bpr.rating }}</span>
+                        <span class="max-score">/5</span>
+                    </div>
+                    <div data-number="5" class="sapo-product-reviews-star" data-score="{{ product.metafields.bpr.rating }}"></div>
+                    <p>(<span itemprop="ratingCount">{{ product.metafields.bpr.votes }}</span> <span>đánh giá</span>)</p>
+                </div>
+                <button type="button" class="btn-new-review" onclick="BPR.newReview(this); return false;" data-content-str="language.newreview"></button>
+            </div>
+        </div>
+        <span class="product-reviews-summary-actions">
+        </span>
+        <div class="sapo-product-reviews-form" id="bpr-form_{{ product.id }}" style="display:none;">
+        </div>
+        <div id="bpr-list" class="sapo-product-reviews-list">
+        </div>
+        <div id="bpr-more-reviews">
+        </div>
+    </div>
+    {% endif %}
+</div>

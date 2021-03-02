@@ -1,0 +1,52 @@
+{% if template contains 'product' %}{%if settings.product_tab3_enable %}{% include 'bpr-products-module' %}{% endif %}{% endif %}
+{%include 'script_js'%}
+
+{% if template contains 'product' %}{{ 'plugin.js' | asset_url | script_tag }}{% endif %}
+{%if settings.quickview_enable %}	
+{% include 'quickview-template' %}
+<script type="text/javascript" defer src="{{ 'quickview.js' | asset_url }}"></script>
+{% endif %}
+{% if template contains 'index' %}
+<link rel="preload" as="script" href="{{ 'index.js' | asset_url }}" />
+{{ 'index.js' | asset_url | script_tag }}
+{% endif %}
+<link rel="preload" as="script" href="{{ 'main.js' | asset_url }}" />
+{{ 'main.js' | asset_url | script_tag }}
+{% if template contains 'collection' %}
+{{ 'jquery-ui-min.scss' | asset_url | stylesheet_tag }}
+{{ 'jquery-ui-min.js' | asset_url | script_tag }}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<link rel="preload" as="script" href="{{ 'search_filter.js' | asset_url }}" />
+{{ 'search_filter.js'  | asset_url | script_tag }}
+<script>
+	var filter = new Bizweb.SearchFilter()
+	{% if collection.id > 0 %}
+	filter.addValue("collection", "collections", "{{ collection.id }}", "AND");
+					{% endif %}
+					function clearAllFiltered() {
+		filter = new Bizweb.SearchFilter();
+		{% if collection.id > 0 %}
+		filter.addValue("collection", "collections", "{{ collection.id }}", "AND");
+						{%- endif -%}
+
+						$(".filter-container__selected-filter-list ul").html("");
+		$(".filter-container input[type=checkbox]").attr('checked', false);
+		$(".filter-container__selected-filter").hide();
+
+		doSearch(1);
+	}
+</script>
+{{ 'col.js'  | asset_url | script_tag }}
+{% endif %}
+{% if template contains 'product' %}
+{{ 'lightbox.css' | asset_url | stylesheet_tag }}
+{% if settings.product_lightbox_enable %}		
+{{ 'jquery.prettyPhoto.min005e.js' | asset_url | script_tag }}
+{{ 'jquery.prettyPhoto.init.min367a.js' | asset_url | script_tag }}
+{% endif %}
+{% endif %}
+<script type='text/javascript'>
+	//<![CDATA[ 
+	function loadCSS(e, t, n) { "use strict"; var i = window.document.createElement("link"); var o = t || window.document.getElementsByTagName("footer")[0]; i.rel = "stylesheet"; i.href = e; i.media = "only x"; o.parentNode.insertBefore(i, o); setTimeout(function () { i.media = n || "all" }) }loadCSS("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
+	//]]> 
+</script>

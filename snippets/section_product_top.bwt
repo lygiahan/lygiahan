@@ -1,0 +1,26 @@
+<section class="section_product_top">
+	<div class="container">
+		<div class="title_module_main">
+			<h2 class="h2">
+				<a href="{{settings.section_top_url}}" title="{{settings.section_top_title}}">{{settings.section_top_title}}</a>
+			</h2>
+		</div>
+		<div class="row">
+			{% assign product_count = collections[settings.section_top_url]products_count %}
+			{% if product_count >= 1 %}
+			{% for product in collections[settings.section_top_url].products limit: {{settings.section_top_limit}}%}
+			<div class="col-md-3 col-6">
+				<div class="item_product_main">
+					{% include 'product_grid_office' %}
+				</div>
+			</div>
+			{%endfor%}
+			{%else%}
+			<div class="col-12 a-center margin-top-15">Hiện tại chưa có sản phẩm nào trong danh mục này!...</div>
+			{%endif%}
+			<div class="col-12 a-center">
+				<a href="{{settings.section_top_url}}" class="button_custome_35 margin-top-20" title="Xem tât cả">Xem tất cả</a>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,644 @@
+{% include 'breadcrumb' %} 
+
+<div class="op_address"></div>
+<section class="address">
+	<div class="container page_address margin-bottom-20">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
+				<div class="block-account">
+					<h5 class="title-account">Trang tài khoản</h5>
+					<p>Xin chào, <span style="color:{{settings.main-color}};">{{ customer.name }}</span>&nbsp;!</p>
+					<ul>
+						<li>
+							<a class="title-info" href="/account">Thông tin tài khoản</a>
+						</li>
+						<li>
+							<a class="title-info" href="/account/orders">Đơn hàng của bạn</a>
+						</li>
+						<li>
+							<a class="title-info" href="/account/changepassword">Đổi mật khẩu</a>
+						</li>
+						<li>
+							<a disabled="disabled" class="title-info active" href="javascript:void(0);">Sổ địa chỉ ({{ customer.addresses_count }})</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-12 col-lg-9">
+
+				<h1 class="title-head">Địa chỉ của bạn</h1>
+				<p class="btn-row">
+					<button class="btn-edit-addr btn btn-primary btn-more" type="button" onclick="Bizweb.CustomerAddress.toggleNewForm(); return false;" >Thêm địa chỉ</button> 							
+				</p>
+				<div id="add_address" class="form-list modal_address modal">
+					<div class="btn-close closed_pop"><i class="fa fa-times"></i></div>
+					<h2 class="title_pop">
+						Thêm địa chỉ mới
+					</h2>
+					{% form 'customer_address', customer.new_address %}
+					<div class="pop_bottom">
+						<div class="form_address">
+							<div class="field">
+								<fieldset class="form-group">
+									<input type="text" name="FullName" class="form-control" data-validation-error-msg= "Không được để trống" data-validation="required" value="{{form.last_name}}{{form.first_name}}" autocapitalize="words">
+									<label>Họ tên</label>
+								</fieldset>
+								<p class="error-msg"></p>
+							</div>
+							<div class="field">
+								<fieldset class="form-group">
+									<input type="number" class="form-control" id="Phone" pattern="\d+" name="Phone" maxlength="12" value="{{form.phone}}">
+									<label>Số điện thoại</label>
+								</fieldset>
+							</div>
+							<div class="field">
+								<fieldset class="form-group">
+									<input type="text" class="form-control" name="Company" value="{{form.company}}" >
+									<label>Công ty</label>
+								</fieldset>
+							</div>
+							<div class="field">
+								<fieldset class="form-group">
+									<input type="text" class="form-control" name="Address1" value="{{form.address1}}" >
+									<label>Địa chỉ</label>
+								</fieldset>
+							</div>
+							<div class="field">
+								<fieldset class="form-group select-field">
+									<select name="Country" class="form-control vn-fix add" id="mySelect1" data-default="{{form.country | default: 'Việt Nam'}}" >{{ country_option_tags }}</select>
+									<label>Quốc gia</label>
+								</fieldset>
+							</div>
+							<div class="group-country">
+								<fieldset class="form-group select-field not-vn">
+									<select name="Province" value="{{form.province}}" class="form-control add" id="mySelect2" data-address-type="province" data-address-zone="billing" data-select2-id="select2-data-billingProvince"></select>
+									<label>Tỉnh thành</label>
+								</fieldset>
+								<fieldset class="form-group select-field not-vn">
+									<select name="District" class="form-control add" value="{{form.district}}" id="mySelect3" data-address-type="district" data-address-zone="billing" data-select2-id="select2-data-billingDistrict"></select>
+									<label>Quận huyện</label>
+								</fieldset>
+								<fieldset class="form-group select-field not-vn">
+									<select name="Ward" class="form-control add" value="{{form.ward}}" id="mySelect4" data-address-type="ward" data-address-zone="billing" data-select2-id="select2-data-billingWard"></select>
+									<label>Phường xã</label>
+								</fieldset>
+							</div>
+							<div class="field">
+								<fieldset class="form-group">
+									<input type="text" class="form-control" name="Zip" value="{{form.zip}}" >
+									<label>Mã Zip</label>
+								</fieldset>
+							</div>
+						</div>
+						<div class="checkbox">
+							<label class="c-input c-checkbox" style="padding-left: 20px;">
+								<input type="checkbox" id="address_default_address_{{form.id}}" name="IsDefault" value="true">
+								<span class="c-indicator">Đặt là địa chỉ mặc định?</span> 
+							</label>
+						</div>	
+						<div class="btn-row">
+							<button class="btn btn-lg btn-dark-address btn-outline article-readmore btn-close" type="button"  onclick="Bizweb.CustomerAddress.toggleNewForm(); return false;"><span>Hủy</span></button>
+							<button class="btn btn-lg btn-primary btn-submit" id="addnew" type="submit"><span>Thêm địa chỉ</span></button>	
+						</div>
+					</div>
+					{% endform %}
+				</div>
+				{% paginate customer.addresses by 6 %}
+				<div class="row total_address">
+					{% for address in customer.addresses %}      
+
+					<div id="view_address_{{address.id}}" class="customer_address col-xs-12 col-lg-12 col-md-12 col-xl-12">
+						<div class="address_info" style="border-top: 1px #ebebeb solid;padding-top: 16px;margin-top: 20px;">
+							<div class="address-group">
+								<div class="address form-signup">
+									<p><strong>Họ tên: </strong>{{address.last_name }} {{ address.first_name }}
+										{% if address.id == customer.default_address.id %}
+										<span class="address-default"><i class="far fa-check-circle"></i>Địa chỉ mặc định</small>
+										{% endif %}
+									</p>
+									<p>
+										<strong>Địa chỉ: </strong>
+										{%if address.address1 != null and address.address1 != ""%}
+										{{address.address1}},
+										{%endif%}
+										{% if address.ward != null and address.ward != "" %}
+										{{ address.ward}},
+										{%endif%}
+										{% if address.district != null and address.district != "" %}
+										{{ address.district }},
+										{%endif%}
+										{%if address.province != null and address.province != ""%}
+										{{ address.province}},
+										{%endif%}
+										{%if address.country != null and address.country != ""%}
+										{{ address.country }}
+										{%endif%}
+									</p>
+									{%if address.phone != null and  address.phone != ""%}
+									<p><strong>Số điện thoại:</strong> {{ address.phone }}</p>
+									{%endif%}
+									{% if address.company != null and address.company != "" %}
+									<p><strong>Công ty:</strong> {{ address.company }}</p>
+									{%endif%}
+								</div>
+							</div>
+							<div id="tool_address_{{address.id}}" class="btn-address">
+								<p class="btn-row">
+									<button class="btn-edit-addr btn btn-primary btn-edit" type="button" data-form="edit_address_{{address.id}}" aria-controls="edit_address_{{address.id}}">
+										Chỉnh sửa địa chỉ
+									</button>
+									<button class="{% if address.id == customer.default_address.id %}hidden {% endif %}btn btn-dark-address btn-edit-addr btn-delete" type="button" onclick="Bizweb.CustomerAddress.destroy({{address.id}});return false"><span>Xóa</span></button>
+								</p>
+							</div>
+						</div>
+					</div>
+					{% endfor %} 
+
+					{% for address in customer.addresses %}
+					<div id="edit_address_{{address.id}}" class="form-list modal_address modal modal_edit_address">
+						<div class="btn-close closed_pop"><i class="fa fa-times"></i></div>
+						<h2 class="title_pop">
+							Chỉnh sửa địa chỉ
+						</h2>
+						{% form 'customer_address', address %}
+						<div class="pop_bottom">
+							<div class="form_address">
+								<div class="field">
+									<fieldset class="form-group">
+										<input type="text" name="FullName" class="form-control" required value="{{form.last_name}} {{form.first_name}}" autocapitalize="words">
+										<label>Họ tên</label>
+									</fieldset>
+									<p class="error-msg"></p>
+								</div>
+								<div class="field">
+									<fieldset class="form-group">
+										<input type="number"  pattern="\d+" class="form-control" id="Phone" name="Phone" maxlength="12" value="{{form.phone}}">
+										<label>Số điện thoại</label>
+									</fieldset>	
+								</div>
+								<div class="field">
+									<fieldset class="form-group">
+										<input type="text" class="form-control" name="Company" value="{{form.company}}" >
+										<label>Công ty</label>
+									</fieldset>
+								</div>
+								<div class="field">
+									<fieldset class="form-group">
+										<input type="text" class="form-control" name="Address1" value="{{form.address1}}" >
+										<label>Địa chỉ</label>
+									</fieldset>
+								</div>
+								<div class="field">
+									<fieldset class="form-group select-field">
+										<select name="Country" class="form-control mySelect2" id="mySelect2_{{address.id}}" data-default="{{form.country}}" >{{form.country}}{{ country_option_tags }}</select>
+										<label>Quốc gia</label>
+									</fieldset>
+								</div>
+								<div class="group-country">
+									<fieldset class="form-group select-field not-vn">
+										<select name="Province" value="{{form.province}}" data-default="{{form.province}}" class="form-control add province myselect" id="mySelect3_{{address.id}}"  data-address-type="province" data-address-zone="{{address.id}}" data-select2-id="select2-data-billingProvince"></select>
+										<label>Tỉnh thành</label>
+									</fieldset>
+									<fieldset class="form-group select-field not-vn">
+										<select name="District" class="form-control add  district myselect" data-default="{{form.district}}" value="{{form.district}}" id="mySelect4_{{address.id}}" data-address-type="district" data-address-zone="{{address.id}}" data-select2-id="select2-data-billingDistrict"></select>
+										<label>Quận huyện</label>
+									</fieldset>
+									<fieldset class="form-group select-field not-vn">
+										<select name="Ward" class="form-control add ward myselect" data-default="{{form.ward}}"value="{{form.ward}}" id="mySelect5_{{address.id}}" data-address-type="ward" data-address-zone="{{address.id}}" data-select2-id="select2-data-billingWard"></select>
+										<label>Phường xã</label>
+									</fieldset>
+								</div>
+
+								<div class="field">
+									<fieldset class="form-group">
+										<input type="text" class="form-control" name="Zip" value="{{form.zip}}" >
+										<label>Mã Zip</label>
+									</fieldset>
+								</div>
+
+							</div>
+							<div class="checkbox {% if address.id == customer.default_address.id %}hidden {% endif %}">
+								<label class="c-input c-checkbox" style="padding-left: 20px;">
+									<input type="checkbox" name="IsDefault" value="true">
+									<span class="c-indicator">Đặt là địa chỉ mặc định?</span> 
+								</label>
+							</div>	
+							<div class="btn-row">	
+								<button class="btn btn-dark-address btn-fix-addr btn-close" type="button" data-form="edit_address_{{address.id}}">
+									Hủy
+								</button>										
+								<button class="btn btn-primary btn-submit" id="update"><span>Cập nhật địa chỉ</span></button>																	
+
+							</div>
+						</div>
+						{% endform %}
+					</div>
+					{%endfor%}
+				</div> 
+				{% if paginate.pages > 1 %}      
+				<div>
+					{% include 'paginate-pages' %} 
+				</div>
+				{% endif %}
+				{% endpaginate %}
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--yeu cau su dung jquery 3. trở lên-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script>$.validate({});</script>
+
+<script type="text/javascript" charset="utf-8">
+
+
+	//JS address with json
+
+	(function (window) {
+		var allProvince = [];
+		var allDistrict = [];
+		var allWard = [];
+		var loadedData = false;
+
+		function setProvince(zone, province) {
+			$province = $("select[data-address-type='province'][data-address-zone='" + zone + "']");
+			if (!$province) {
+				return;
+			}
+			var list = ['<option value="" hidden>---</option>'];
+			for (var i = 0; i < allProvince.length; i++) {
+				var p = allProvince[i];
+				if (p.name == province) {
+					list.push("<option value='" + p.name + "' selected>" + p.name + "</option>");
+					continue;
+				}
+				list.push("<option value='" + p.name + "'>" + p.name + "</option>");
+			}
+
+			$province.html(list.join(''));
+		};
+
+		function setDistrict(zone, province, district) {
+			var $district = $("select[data-address-type='district'][data-address-zone='" + zone + "']");
+			if (!$district) {
+				return;
+			}
+			if (!province) {
+				$district.val('');
+				$district.attr('disabled', 'disabled');
+				$district.html('');
+				return;
+			}
+			var provinceObj = allProvince.find(function(p) { return p.name == province; });
+			var districts = allDistrict.filter(function (d) { return d.province_id == provinceObj.id; });
+			var list = ['<option value="" hidden>---</option>'];
+			for (var i = 0; i < districts.length; i++) {
+				var d = districts[i];
+				if (d.name == district) {
+					list.push("<option value='" + d.name + "' selected>" + d.name + "</option>");
+					continue;
+				}
+				list.push("<option value='" + d.name + "'>" + d.name + "</option>");
+			}
+			$district.removeAttr('disabled');
+			$district.html(list.join(''));
+		};
+
+		function setWard(zone, district, ward) {
+			var $ward = $("select[data-address-type='ward'][data-address-zone='" + zone + "']");
+			if (!$ward) {
+				return;
+			}
+			if (!district) {
+				$ward.val('');
+				$ward.attr('disabled', 'disabled');
+				$ward.html('');
+				return;
+			}
+			var list = ['<option value="" hidden>---</option>'];
+			var districtObj = allDistrict.find(function(d) { return d.name == district; });
+			var wards = allWard.filter(function (w) { return w.district_id == districtObj.id; });
+			for (var i = 0; i < wards.length; i++) {
+				var w = wards[i];
+				if (w.name == ward) {
+					list.push("<option value='" + w.name + "' selected>" + w.name + "</option>");
+					continue;
+				}
+				list.push("<option value='" + w.name+ "'>" + w.name + "</option>");
+			}
+			$ward.removeAttr('disabled');
+			$ward.html(list.join(''));
+		};
+
+
+		function loadData() {
+			if (loadedData) {
+				return {
+					then: function (f) {
+						return f();
+					}
+				};
+			}
+			return fetch('/checkout/addresses.json')
+				.then(function (rs) { return rs.json(); })
+				.then(function (rs) {
+				allProvince = rs.provinces;
+				allDistrict = rs.districts;
+				allWard = rs.wards;
+				loadedData = true;
+			});
+		};
+
+		function Address() {
+
+		}
+
+		function triggerChange(zone, type) {
+			$('select[data-address-type="' + type + '"][data-address-zone="' + zone + '"]').trigger('address:change');
+		}
+
+		Address.prototype.bind = function () {
+			$('body')
+				.on('change', 'select[data-address-type]', function (e) {
+				var type = e.target.getAttribute('data-address-type');
+				var zone = e.target.getAttribute('data-address-zone');
+				if (type === 'province') {
+					triggerChange(zone, 'province');
+					setDistrict(zone, e.target.value, undefined);
+					triggerChange(zone, 'district');
+					setWard(zone, '', undefined);
+					triggerChange(zone, 'ward');
+				} else if (type === 'district') {
+					triggerChange(zone, 'district');
+					setWard(zone, e.target.value, undefined);
+					triggerChange(zone, 'ward');
+				}
+			})
+			return this;
+		};
+
+		Address.prototype.refresh = function (callback) {
+			var zones = {};
+			$('[data-address-zone]').each(function () {
+				var $this = $(this);
+				var type = $this.data('address-type');
+				if (!type) {
+					return;
+				}
+				var zoneName = $this.data('address-zone');
+				var zone = zones[zoneName] || (zones[zoneName] = {});
+				zone[type] = $this.val() || $this.attr('value');
+			});
+			var zoneNames = Object.keys(zones);
+			if (zoneNames.length == 0) {
+				return;
+			}
+			loadData().then(function () {
+				zoneNames.forEach(function (zoneName) {
+					var zone = zones[zoneName];
+					setProvince(zoneName, zone.province);
+					triggerChange(zoneName, 'province');
+					setDistrict(zoneName, zone.province, zone.district);
+					triggerChange(zoneName, 'district');
+					setWard(zoneName, zone.district, zone.ward);
+					triggerChange(zoneName, 'ward');
+				});
+				if (callback) {
+					callback();
+				}
+			});
+		};
+
+		window.Address = new Address();
+
+	})(window)
+
+
+	//Page address
+
+	new Bizweb.CountrySelector('address_country_new');
+	{% for address in customer.addresses %}
+	new Bizweb.CountrySelector('address_country_{{address.id}}');
+							   {% endfor %}
+
+							   $(document).ready(function() {
+
+		var elements = $("input, select, textarea");
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].oninvalid = function(e) {
+				e.target.setCustomValidity("");
+				if (!e.target.validity.valid) {
+					e.target.setCustomValidity(e.target.getAttribute("requiredmsg"));
+				}
+			};
+			elements[i].oninput = function(e) {
+				e.target.setCustomValidity("");
+			};
+		}
+		$('.mySelect2').each(function(){
+			var old = $(this).attr('data-default');			  
+			$(this).val(old);
+			$(this).change();
+		})
+
+		$('.btn-close').on('click', function(e){
+			e.preventDefault();
+			$('.op_address').removeClass('opened');
+			$('.modal_address').hide();
+			$('html').removeClass('no-scroll');
+			$('.not-vn').removeClass('hidden');
+			Address.bind().refresh();
+			$('.mySelect2').each(function(){
+				var old = $(this).attr('data-default');			  
+				$(this).val(old);
+				$(this).change();
+			})
+			setTimeout( function() {
+				$('input').prop('selected', false);
+			}, 500)
+			$('.form-group input').each(function(){
+				if($(this).val() != ""){
+					$(this).addClass("has-content");
+				}else{
+					$(this).removeClass("has-content");
+				}
+			})
+		});
+		$('.btn-fix-addr').click(function(e){
+			$(this).parents('.collapse').removeClass('in').hide();
+		})
+	})
+
+	$('fieldset').click(function(){
+		$(this).find('input').focus();
+	});
+
+	$(document).on('click', '.btn-more', function(e) {
+		$('.op_address').toggleClass('opened');
+		$('#add_address').show();
+		$('html').toggleClass('no-scroll');
+		$('.mySelect2').each(function(){
+			var old = $(this).attr('data-default');			  
+			$(this).val(old);
+			$(this).change();
+		})
+		if($("#customer_address select[name='Country'] option:selected").val() != 'Vietnam'){
+			$('.not-vn').addClass('hidden');
+		}else {
+			$('.not-vn').removeClass('hidden');
+		}
+
+		Address.bind().refresh();
+		$('.form-group input').each(function(){
+			if($(this).val() != ""){
+				$(this).addClass("has-content");
+			}else{
+				$(this).removeClass("has-content");
+			}
+		})
+	});
+	if ($( window ).width() > 768) {
+		$(function(){
+			setInterval(function() {
+				if($('.modal_address').find("select[name='Country'] option:selected").val() != 'Vietnam') {
+					if ($(".modal_address input[name='FullName']").val() === '') {
+						if ($('.help-block.form-error').length) {
+							$('.modal_address').css("height","515px");
+						}else {
+							$('.modal_address').css("height","495px");
+						}
+					}else {
+						$('.modal_address').css("height","495px");
+					}
+				} else if ($('.modal_address').find("select[name='Country'] option:selected").val() === 'Vietnam') {
+					if ($(".modal_address input[name='FullName']").val() !== '') {
+						$('.modal_address').css("height","545px");
+					}else {
+						if ($('.help-block.form-error').length) {
+							$('.modal_address').css("height","575px");
+						}else {
+							$('.modal_address').css("height","545px");
+						}
+					}
+				}else {
+					$('.modal_address').css("height","545px");
+				}
+				
+				
+				
+				if($('.modal_edit_address').find("select[name='Country'] option:selected").val() != 'Vietnam') {
+					if ($(".modal_edit_address input[name='FullName']").val() === '') {
+						if ($('.help-block.form-error').length) {
+							$('.modal_edit_address').css("height","515px");
+						}else {
+							$('.modal_edit_address').css("height","495px");
+						}
+					}else {
+						$('.modal_edit_address').css("height","495px");
+					}
+				} else if ($('.modal_edit_address').find("select[name='Country'] option:selected").val() === 'Vietnam') {
+					if ($(".modal_edit_address input[name='FullName']").val() !== '') {
+						$('.modal_edit_address').css("height","545px");
+					}else {
+						if ($('.help-block.form-error').length) {
+							$('.modal_edit_address').css("height","575px");
+						}else {
+							$('.modal_edit_address').css("height","545px");
+						}
+					}
+				}else {
+					$('.modal_edit_address').css("height","545px");
+				}
+				
+			}, 500);
+		})
+	}
+
+	$(function(){    
+		$("select[name='Country']").change(function(){
+			if( $(this).val() != 'Vietnam'){
+				$('.not-vn').addClass('hidden');
+			}else {
+				$('.not-vn').removeClass('hidden');
+			}
+		}); 
+	});
+
+
+	$(document).on('click', '.btn-edit', function(e) {
+		$('.op_address').toggleClass('opened');
+		var ctr = $(this).attr('aria-controls');			
+		$('#'+ctr).show();
+		$('html').toggleClass('no-scroll');
+		Address.bind().refresh();
+		var idform = $(this).data('form');
+		$('.mySelect2').each(function(){
+			var old = $(this).attr('data-default');			  
+			$(this).val(old);
+			$(this).change();
+		})
+		if( $('#'+idform).find("select[name='Country']").data('default') != 'Vietnam'){
+			$('.not-vn').addClass('hidden');
+		}else {
+			$('.not-vn').removeClass('hidden');
+		}
+		$('#'+idform).each(function() {
+			var thisform = $(this);
+			$(thisform).find('.province').each(function(){
+				if($(thisform).find('.province').data('default') != ""){
+					$(thisform).find('.province').addClass("has-content");
+				}else{
+					$(thisform).find('.province').removeClass("has-content");
+				}
+			})
+			$(thisform).find('.district').each(function(){
+				if($(thisform).find('.district').data('default') != ""){
+					$(thisform).find('.district').addClass("has-content");
+				}else{
+					$(thisform).find('.district').removeClass("has-content");
+				}
+			})
+			$(thisform).find('.ward').each(function(){
+				if($(thisform).find('.ward').data('default') != ""){
+					$(thisform).find('.ward').addClass("has-content");
+				}else{
+					$(thisform).find('.ward').removeClass("has-content");
+				}
+			})
+		});
+	});
+
+	
+	
+	$(window).load(function(){
+		setTimeout(function(){
+			$('.form-group input').each(function(){
+				if($(this).val() != ""){
+					$(this).addClass("has-content");
+				}else{
+					$(this).removeClass("has-content");
+				}
+			})
+			$('.form-group select').each(function(){
+				$('.form-group .add').val("Vietnam");
+				if($(this).val() != ""){
+					$(this).addClass("has-content");
+				}else{
+					$(this).removeClass("has-content");
+				}
+			})
+			$(".form-group input,.form-group select").focusout(function(){
+				if($(this).val() != ""){
+					$(this).addClass("has-content");
+				}else{
+					$(this).removeClass("has-content");
+				}
+			})
+		},500);
+		return false;
+	});
+
+
+
+</script>

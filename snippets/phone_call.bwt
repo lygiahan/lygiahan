@@ -1,0 +1,6 @@
+{%if settings.phone_call%}
+<a href="tel:{{store.phone_number| replace: ' '}}" class="suntory-alo-phone {{settings.phone_call_pos}} suntory-alo-green " id="suntory-alo-phoneIcon">
+
+	<div class="suntory-alo-ph-img-circle"><i class="fa fa-phone"></i></div>
+</a>
+{%endif%}

@@ -1,0 +1,33 @@
+<div class="section_banner_adv">
+	<div class="container">
+		<div class="row"> 
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="adv_bottom_inner">
+					<figure class="img_effect">
+						<a href="{{settings.sec_adv_link_1}}" title="{{ settings.sec_adv_title_1 }}">
+							<img class="img-responsive center-base" src="{{ 'banner_1.png' | asset_url }}" alt="{{settings.sec_adv_alt_1 | default: store.name}}">
+						</a>
+					</figure>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="adv_bottom_inner">
+					<figure class="img_effect">
+						<a href="{{settings.sec_adv_link_2}}" title="{{ settings.sec_adv_title_2 }}">
+							<img class="img-responsive center-base" src="{{ 'banner_2.png' | asset_url }}" alt="{{settings.sec_adv_alt_2 | default: store.name}}">
+						</a>
+					</figure>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="adv_bottom_inner">
+					<figure class="img_effect">
+						<a href="{{settings.sec_adv_link_3}}" title="{{ settings.sec_adv_title_3 }}">
+							<img class="img-responsive center-base" src="{{ 'banner_3.png' | asset_url }}" alt="{{settings.sec_adv_alt_3 | default: store.name}}">
+						</a>
+					</figure>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

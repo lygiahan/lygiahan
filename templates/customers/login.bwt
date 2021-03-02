@@ -1,0 +1,98 @@
+{% include 'breadcrumb' %} 
+<section class="section">
+	<div class="container margin-bottom-20">
+		<div class="wrap_background_aside margin-bottom-40 page_login">
+			<h1 class="title_page">Đăng nhập tài khoản</h1>
+			<div class="row">
+				<div class="col-12 ol-md-6 offset-md-3 col-lg-4 offset-lg-4">
+
+					<div class="page-login">
+						<div id="login">
+							<h2>
+								Khách hàng đăng nhập
+							</h2>
+							<p class="des">
+								Nếu bạn có một tài khoản, xin vui lòng đăng nhập
+							</p>
+							{% form 'customer_login' %}
+							<div class="form-signup margin-bottom-15" style="color:red;">
+								{% for field in form.errors %}
+								{{ form.errors.messages[field] }}<br/>
+								{% endfor %}
+							</div>
+							<div class="form-signup clearfix">
+								<fieldset class="form-group">
+									<label>Email <span class="required">*</span></label>
+									<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" class="form-control form-control-lg" value="" name="email" id="customer_email" placeholder="Email" Required>
+								</fieldset>
+								<fieldset class="form-group">
+									<label>Mật khẩu <span class="required">*</span> </label>
+									<input type="password" class="form-control form-control-lg" value="" name="password" id="customer_password" placeholder="Mật khẩu" Required>
+								</fieldset>
+								<div class="pull-xs-left button_bottom a-center">
+									<button class="btn btn-style btn_50 btn-login"  type="submit" value="Đăng nhập">Đăng nhập</button>
+									<p>Bạn chưa có tài khoản <a href="/account/register" class="btn-link-style btn-register" style="text-decoration: underline; ">Đăng ký tại đây</a></p>
+									<p>Bạn quên mật khẩu <a href="#" class="btn-link-style" style="margin-right: 30px;" onclick="showRecoverPasswordForm();return false;">Lấy lại tại đây</a></p>
+								</div>
+
+							</div>
+							{% endform %}
+						</div>
+						{% if form.posted_successfully %}
+						<div class="alert alert-success">
+							<p>Chúng tôi đã gửi 1 email đến bạn. Vui lòng kiểm tra để đặt lại mật khẩu</p>
+						</div>
+						{% endif %}
+						<div id="recover-password" style="display:none;"  class="form-signup page-login">
+							<h2>
+								Đặt lại mật khẩu
+							</h2>
+							<span>
+								Chúng tôi sẽ gửi cho bạn một email để kích hoạt việc đặt lại mật khẩu.
+							</span>					
+							{% form 'recover_customer_password' %}
+							<div class="form-signup" style="color: red;">
+								{% for field in form.errors %}
+								{{ form.errors.messages[field] }} <br/>
+								{% endfor %}
+							</div>
+							<div class="form-signup clearfix">
+								<fieldset class="form-group">
+									<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" class="form-control form-control-lg" value="" name="Email" id="recover-email" placeholder="Email" Required>
+								</fieldset>
+							</div>
+							<div class="action_bottom">
+								<input class="btn btn-style btn-primary btn-recover" type="submit" value="Gửi" />
+								<a href="#" class="btn btn-style btn-style-active" onclick="hideRecoverPasswordForm();return false;">Hủy</a>
+							</div>
+							{% endform %}
+						</div>
+					</div>
+					<div class="block social-login--facebooks margin-top-20">
+						<p class="a-center">
+							Hoặc đăng nhập bằng
+						</p>
+						{{ social_login.script }}
+						{{ social_login.facebook_button }}
+						{{ social_login.google_button }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<script type="text/javascript">
+	function showRecoverPasswordForm() {
+		document.getElementById('recover-password').style.display = 'block';
+		document.getElementById('login').style.display='none';
+	}
+
+	function hideRecoverPasswordForm() {
+		document.getElementById('recover-password').style.display = 'none';
+		document.getElementById('login').style.display = 'block';
+	}
+
+	if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+</script>

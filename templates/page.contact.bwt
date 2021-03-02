@@ -1,0 +1,75 @@
+{% include 'breadcrumb' %} 
+<div class="page_contact ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-12">
+				<div class="left-contact">
+					<h1>{{settings.title_page}}</h1>
+					<div class="single-contact">
+						<i class="fa fa-map-marker-alt"></i>
+						<div class="content">Địa chỉ:
+							<span>{{ store.address }}, {{store.province}}, {{store.country}}</span>
+						</div>
+					</div>
+					<div class="single-contact">
+						<i class="fa fa-mobile-alt"></i>
+						<div class="content">
+							Số điện thoại: <a href="tel:{{settings.phone | default: store.phone_number | remove: ' '}}">{{settings.phone | default: store.phone_number}}</a>
+						</div>
+					</div>
+					<div class="single-contact">
+						<i class="fa fa-envelope"></i>
+						<div class="content">
+							Email: <a href="mailto:{{settings.email | default:store.customer_email }}">{{settings.email | default:store.customer_email }}</a>
+						</div>
+					</div>
+					<h2 class="title-head-contact">Liên hệ với chúng tôi</h2>
+					<div id="pagelogin">
+						{% form 'contact' %}
+						{% if form.errors.size > 0 %}
+						<div class="alert alert-danger">
+							{% for field in form.errors %}
+							<span>{{ form.errors.messages[field] }}</span>
+							{% endfor %}
+						</div>
+						{% endif %}
+						{% if form.posted_successfully %}
+						<div class="alert alert-success">
+							<span>Bạn đã gửi tin nhắn thành công</span>
+						</div>
+						{% endif %}
+						<div class="form-signup clearfix">
+							<div class="row group_contact">
+								<fieldset class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input placeholder="Họ tên*" type="text" class="form-control  form-control-lg" autocomplete="false" required value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.first_name }} {{ customer.last_name }}{% endif %}" name="contact[Name]">
+								</fieldset>
+								<fieldset class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input placeholder="Email*" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" autocomplete="off" required id="email1" class="form-control form-control-lg" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" name="contact[email]">
+								</fieldset>
+								<fieldset class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input placeholder="Số điện thoại*" type="text" class="form-control  form-control-lg" autocomplete="off" required pattern="\d+" name="contact[Phone]" value="{{form.phone}}">
+								</fieldset>
+								<fieldset class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<textarea placeholder="Nhập nội dung*" name="contact[body]" id="comment" autocomplete="off" class="form-control content-area form-control-lg" rows="5" Required></textarea>
+								</fieldset>
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<button type="submit" class="btn btn-primary btn-lienhe">Gửi liên hệ của bạn</button>
+								</div>
+							</div>
+						</div>
+						{% endform %}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-12">
+				<div class="iFrameMap">
+					<div id="contact_map" class="map">
+						{{ settings.contactr_contact_maps }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>

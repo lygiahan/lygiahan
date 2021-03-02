@@ -1,0 +1,189 @@
+<script type="text/x-custom-template" data-template="ItemDropCart">
+<li class="item productid-${id_item}">
+	<div class="border_list"><div class="image_drop">
+		<a class="product-image" href="${url}" title="${title}">
+			<img alt="${title}" src="${image_url}"width="'+ '100' +'"\>
+		</a>
+		</div>
+		<div class="detail-item">
+			<div class="product-details">
+				<span href="javascript:;" data-id="${id_item}" title="Xóa" class="remove-item-cart fa fa-times"></span>
+				<p class="product-name"> <a href="${url}" title="${title}">${title}</a></p></div>
+				<span class="variant-title">${variant_title}</span>
+			<div class="product-details-bottom"><span class="price">${price}</span>
+				<span class="quanlity">${quanty}</span>
+				<div class="quantity-select qty_drop_cart">
+					<input class="variantID" type="hidden" name="variantId" value="${id_item}">
+					<button onClick="var result = document.getElementById('qty${id_item}'); var qty${id_item} = result.value; if( !isNaN( qty${id_item} ) &amp;&amp; qty${id_item} &gt; 1 ) result.value--;return false;" class=" btn_reduced reduced items-count btn-minus" ${buttonQty} type="button">–</button>
+					<input type="text" maxlength="3" min="1" readonly class="input-text number-sidebar qty${id_item}" id="qty${id_item}" name="Lines" id="updates_${id_item}" size="4" value="${quanty}">
+					<button onClick="var result = document.getElementById('qty${id_item}'); var qty${id_item} = result.value; if( !isNaN( qty${id_item} )) result.value++;return false;" class=" btn_increase increase items-count btn-plus" type="button">+</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
+</script>
+<script type="text/x-custom-template" data-template="HeaderCartPc">
+<div class="cart page_cart hidden-xs hidden-sm row">
+	<form action="/cart" method="post" novalidate class="formcartpage col-lg-12 col-md-12 margin-bottom-0">
+		<div class="bg-scroll">
+			<div class="cart-thead">
+				<div style="width: 18%" class="a-center">Ảnh sản phẩm</div>
+				<div style="width: 32%" class="a-center">Tên sản phẩm</div>
+				<div style="width: 17%" class="a-center">Đơn giá</div>
+				<div style="width: 14%" class="a-center">Số lượng</div>
+				<div style="width: 14%" class="a-center">Thầnh tiền</div>
+				<div style="width: 5%" class="a-center">Xóa</div>
+			</div>
+			<div class="cart-tbody">
+			</div>
+		</div>
+	</form>
+</div>
+</script>
+<script type="text/x-custom-template" data-template="pageCartCheckout">
+<div class="col-lg-7 col-md-7">
+	<a href="/" class="form-cart-continue">Tiếp tục mua hàng</a>
+</div>
+<div class="col-lg-5 col-md-5">
+	<div class="section bg_cart shopping-cart-table-total">
+		<div class="table-total">
+			<table class="table">
+				<tr>
+					<td coldspan="20" class="total-text">Tổng tiền thanh toán: </td>
+					<td class="txt-right totals_price price_end a-right">${price_total}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="section continued">
+		<a href="/checkout" class="btn-checkout-cart button_checkfor_buy">Tiến hành thanh toán</a>
+	</div>
+</div>
+</script>
+
+<script type="text/x-custom-template" data-template="pageCartItem">
+<div class="item-cart productid-${id_item}">
+	<div style="width: 18%" class="image">
+		<a class="product-image a-left" title="${title}" href="${url}">
+			<img width="75" height="auto" alt="${title}" src="${image_url}">
+		</a>
+	</div>
+	<div style="width: 32%" class="a-center">
+		<h3 class="product-name"> <a class="text2line" href="${url}" title="${title}">${title}</a> </h3>
+		<span class="variant-title">${variant_title}</span>
+		<a class="remove-itemx remove-item-cart" title="Xóa" href="javascript:;" data-id="${id_item}">
+		</a>
+	</div>
+	<div style="width: 17%" class="a-center">
+		<span class="cart-prices">
+			<span class="prices">${price}</span> 
+		</span>
+	</div>
+	<div style="width: 14%" class="a-center">
+		<div class="input_qty_pr">
+			<input class="variantID" type="hidden" name="variantId" value="${id_item}">
+			<button onClick="var result = document.getElementById('qtyItem${id_item}'); var qtyItem${id_item} = result.value; if( !isNaN( qtyItem${id_item} ) &amp;&amp; qtyItem${id_item} &gt; 1 ) result.value--;return false;" ${buttonQty} class="reduced_pop items-count btn-minus" type="button">-</button>
+			<input type="text" maxlength="3" readonly min="0" class="check_number_here input-text number-sidebar input_pop input_pop qtyItem${id_item}" id="qtyItem${id_item}" name="Lines" id="updates_${id_item}" size="4" value="${quanty}">
+			<button onClick="var result = document.getElementById('qtyItem${id_item}'); var qtyItem${id_item} = result.value; if( !isNaN( qtyItem${id_item} )) result.value++;return false;" class="increase_pop items-count btn-plus" type="button">+</button>
+		</div>
+	</div>
+	<div style="width: 14%" class="a-center">
+		<span class="cart-price">
+			<span class="price">${price_quanty}</span> 
+		</span>
+	</div>
+	<div style="width: 5%" class="a-center">
+		<a class="remove-itemx remove-item-cart" title="Xóa" href="javascript:;" data-id="${id_item}">
+			<span><i class="fa fa-trash-alt"></i></span>
+		</a>
+	</div>
+</div>
+</script>
+
+<script type="text/x-custom-template" data-template="ItemCartMobile">
+<div class="item-product item productid-${id_item} ">
+	<div class="item-product-cart-mobile">
+		<a href="${url}">	
+			<a class="product-images1" href=""  title="${title}">
+				<img width="80" height="150" src="${image_url}" alt="${title}">
+			</a>
+		</a>
+	</div>
+	<div class="title-product-cart-mobile">
+		<h3>
+			<a href="${url}" title="${title}">${title}</a>
+		</h3>
+		<p>
+			Giá: <span>${price}</span>
+		</p>
+	</div>
+	<div class="select-item-qty-mobile">
+		<div class="txt_center">
+			<input class="variantID" type="hidden" name="variantId" value="${id_item}">
+			<button onClick="var result = document.getElementById('qtyMobile${id_item}'); var qtyMobile${id_item} = result.value; if( !isNaN( qtyMobile${id_item} ) &amp;&amp; qtyMobile${id_item} &gt; 1 ) result.value--;return false;" class="reduced items-count btn-minus" type="button"><i class="fa fa-minus"></i></button>
+			<input type="text" maxlength="3" min="1" class="input-text number-sidebar qtyMobile${id_item}" id="qtyMobile${id_item}" name="Lines" id="updates_${id_item}" size="4" value="${quanty}">
+			<button onClick="var result = document.getElementById('qtyMobile${id_item}'); var qtyMobile${id_item} = result.value; if( !isNaN( qtyMobile${id_item} )) result.value++;return false;" class="increase items-count btn-plus" type="button"><i class="fa fa-plus"></i></button>
+		</div>
+		<a class="button remove-item remove-item-cart" href="javascript:;" data-id="${id_item}">Xoá</a>
+	</div>
+</div>
+</script>
+
+<script type="text/x-custom-template" data-template="pageCartCheckoutMobile">
+<div class="header-cart-price">
+	<div class="title-cart">
+		<h3 class="text-xs-left">Tổng tiền</h3>
+		<a class="text-xs-right  totals_price_mobile">${price_total}</a>
+	</div>
+	<div class="checkout">
+		<button class="btn-proceed-checkout-mobile" title="Tiến hành thanh toán" type="button" onclick="window.location.href='/checkout'">
+			<span>Tiến hành thanh toán</span></button>
+		<button class="btn btn-white f-left" title="Tiếp tục mua hàng" type="button" onclick="window.location.href='/collections/all'">
+			<span>Tiếp tục mua hàng</span>
+		</button>
+	</div>
+</div>
+</script>
+
+<script type="text/x-custom-template" data-template="TemplateItemPopupCart">
+<div class="item-popup productid-${id_item}">
+	<div style="width: 13%;" class="height image_ text-left">
+		<div class="item-image">
+			<a class="product-image" href="${url}" title="${title}">
+				<img alt="${title}" src="${image_url}"width="'+ '90' +'"\>
+			</a>
+		</div>
+	</div>
+	<div style="width:40%;" class="height text-left fix_info">
+		<div class="item-info">
+			<p class="item-name">
+				<a class="text2line textlinefix" href="${url}" title="${title}">${title}</a>
+			</p>
+			<span class="variant-title-popup">${variant_title}</span>
+			<a href="javascript:;" class="remove-item-cart" title="Xóa" data-id="${id_item}">
+				<i class="fa fa-times"></i>&nbsp;&nbsp;Bỏ sản phẩm
+			</a>
+			<p class="addpass" style="color:#fff;margin:0px;">${id_item}</p>
+		</div>
+	</div>
+	<div style="width: 15%;" class="height text-center">
+		<div class="item-price">
+			<span class="price">${price}</span>
+		</div>
+	</div>
+	<div style="width: 15%;" class="height text-center">
+		<div class="qty_h check_">
+			<input class="variantID" type="hidden" name="variantId" value="${id_item}">
+			<button onClick="var result = document.getElementById('qtyItemP${id_item}'); var qtyItemP${id_item} = result.value; if( !isNaN( qtyItemP${id_item} ) &amp;&amp; qtyItemP${id_item} &gt; 1 ) result.value--;return false;" ${buttonQty} class="num1 reduced items-count btn-minus" type="button">-</button>
+			<input type="text" maxlength="3" min="0" readonly class="input-text number-sidebar qtyItemP${id_item}" id="qtyItemP${id_item}" name="Lines" id="updates_${id_item}" size="4" value="${quanty}">
+			<button onClick="var result = document.getElementById('qtyItemP${id_item}'); var qtyItemP${id_item} = result.value; if( !isNaN( qtyItemP${id_item} )) result.value++;return false;" class="num2 increase items-count btn-plus" type="button">+</button>
+		</div>
+	</div>
+	<div style="width: 17%;" class="height text-center">
+		<span class="cart-price">
+			<span class="price">${price_quanty}</span>
+		</span>
+	</div>
+</div>
+</script>

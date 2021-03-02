@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="theme-color" content="{{ settings.color_main }}" />
+		<link rel="canonical" href="{{ canonical_url }}"/>
+		<meta name='revisit-after' content='2 days' />
+		{% if current_page != 1 or template contains 'search' or template contains 'cart' %}<meta name="robots" content="follow, noindex">{% else %}<meta name="robots" content="noodp,index,follow" />{% endif %}
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">	
+		{% if current_page != 1 %}<meta name="description" content="{{ page_description }} | Trang {{ current_page }}">{% else %}<meta name="description" content="{{ page_description }}">{% endif %}
+		<title>{%if page_title == 'All'%}Tất cả sản phẩm{%else%}{{ page_title }}{%endif%}{% if current_tags %} tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} - Trang {{ current_page }}{% endif %}		</title>
+		{{ content_for_header }}
+		{%if template contains 'index' %}{% if settings.home_page_keywords != '' and settings.home_page_keywords != null%}<meta name="keywords" content="{{settings.home_page_keywords}}"/>{%else%}<meta name="keywords" content="{{store.name}}, {{store.domain}}"/>{%endif%}{%elsif template contains 'product'%}<meta name="keywords" content="{{product.name}}, {% for collection in product.collections%}{{collection.name}}, {%endfor%}{%if product.tags.size > 0%}{% for tag in product.tags %}{{tag}}, {% endfor%}{%endif%}{{store.name}}, {{store.domain}}"/>{%elsif template contains 'collection'%}<meta name="keywords" content="{{collection.name }}, {{store.name}}, {{store.domain}}"/>{%elsif template contains 'blog'%}<meta name="keywords" content="{{blog.name }}, {{store.name}}, {{store.domain}}"/>{%elsif template contains 'article'%}<meta name="keywords" content="{{article.title}}, {{blog.name}}, {%if article.tags.size > 0%}{% for tag in article.tags %}{{tag}}, {%endfor%}{%endif%} {{store.name}}, {{store.domain}}"/>{%else%}<meta name="keywords" content="{{page_title}}, {{store.name}}, {{store.domain}}"/>{%endif%}		
+		{% include 'fb-open-graph-tags' %}
+		{% if settings.favicon_enable%}<link rel="icon" href="{{ 'favicon.png' | asset_url }}" type="image/x-icon" />{%endif%}
+		{%include 'head_styles'%}
+		{%include 'head_scripts'%}
+		{% if template contains 'product'%}<script>var ProductReviewsAppUtil=ProductReviewsAppUtil || {};{% if customer %}ProductReviewsAppUtil.customer={id: '{{customer.id}}',name: '{{customer.name}}',email: '{{customer.email}}', phone: '{{customer.phone}}'};{% endif %}ProductReviewsAppUtil.store={name: '{{store.name}}'};</script>{%endif%}
+		{% include 'schema' %}
+		<script>
+			$(document).ready(function ($) {
+				awe_lazyloadImage();
+			});
+			function awe_lazyloadImage() {
+				var ll = new LazyLoad({
+					elements_selector: ".lazyload",
+					load_delay: 100,
+					threshold: 0
+				});
+			} window.awe_lazyloadImage=awe_lazyloadImage;
+		</script>
+	</head>
+	<body>
+		<div class="op_login"></div>
+		<div class="opacity_menu"></div>
+		{% include 'header' %}
+		{{ content_for_layout }}
+		{% include 'footer' %}
+		{% include 'footer_scripts'%}
+		{% include 'templatecart'%}
+		{%unless template contains 'cart' or template contains 'customer' %}{% include 'popup-cart' %}{%endunless%}
+		{% include 'api.jquery.custom' %}
+		<!-- Add to cart -->
+		<div id="popupCartModal" class="modal fade" role="dialog">
+		</div>
+	</body>
+</html>

@@ -1,0 +1,165 @@
+{%unless template contains 'index' or template contains '404'%}
+<script type="application/ld+json">
+        {
+        "@context": "http://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": 
+        [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}",
+                  "name": "Trang chủ"
+                }
+            },
+      {% if template contains 'product' %}
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/{{ product.alias }}",
+                  "name": "{{ product.name }}"
+                }
+            }
+      {%endif%}
+        {% if template contains 'collection' and collection.alias %}
+      {%if collection.alias == 'all'%}
+      {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/collections/all",
+                  "name": "{{ collection.name }}"
+                }
+            }{% if current_tags %},{%endif%}
+      {%else%}
+      {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/{{ collection.alias }}",
+                  "name": "{{ collection.name }}"
+                }
+            }{% if current_tags %},{%endif%}
+      {%endif%}
+      {% if current_tags %}
+        {%if collection.alias == 'all'%}
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": 
+          {
+            "@id": "https:{{store.url}}/collections/all/{{ current_tags.first }}",
+            "name": "{{ current_tags.first }}"
+          }
+        }
+        {%else%}
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": 
+          {
+            "@id": "https:{{store.url}}/{{ collection.alias }}/{{ current_tags.first }}",
+            "name": "{{ current_tags.first }}"
+          }
+        }
+        {%endif%}
+      {%endif%}
+      {%endif%}
+      {% if template contains 'article' %}
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}{{ blog.url }}",
+                  "name": "{{ blog.name }}"
+                }
+            },
+      {
+                "@type": "ListItem",
+                "position": 3,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}{{ article.url }}",
+                  "name": "{{ article.title }}"
+                }
+            }
+      {%endif%}
+      {% if template == 'blog' %}
+      {%if current_url contains 'blogs/all'%}
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/blogs/all",
+                  "name": "{{ blog.name }}"
+                }
+            }
+      {%else%}
+        {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}{{blog.url}}",
+                  "name": "{{ blog.name }}"
+                }
+            }
+      {%if current_tags%}
+      ,
+      {
+                "@type": "ListItem",
+                "position": 3,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}{{blog.url}}/{{ current_tags.first }}",
+                  "name": "{{ current_tags.first }}"
+                }
+            }
+      {%endif%}
+      {%endif%}
+      {%endif%}
+      {% if template contains 'page' %}
+      {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/{{ page.alias }}",
+                  "name": "{{ page.title }}"
+                }
+            }
+      {% endif %}
+      {% if template contains 'cart' %}
+      {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/cart",
+                  "name": "Giỏ hàng"
+                }
+            }
+      {% endif %}
+    {% if template contains 'search' %}
+      {
+                "@type": "ListItem",
+                "position": 2,
+                "item": 
+                {
+                  "@id": "https:{{store.url}}/search",
+                  "name": "Tìm kiếm"
+                }
+            }
+      {% endif %}
+        ]
+        }
+</script>
+{%endunless%}

@@ -1,0 +1,18 @@
+<link rel="preload" as='style' type="text/css" href="{{ 'main.scss.css' | asset_url }}">
+<link rel="preload" as='style'  type="text/css" href="{{ 'index.scss.css' | asset_url }}">
+<link rel="preload" as='style'  type="text/css" href="{{ 'bootstrap-4-3-min.css' | asset_url }}">
+<link rel="preload" as='style'  type="text/css" href="{{ 'responsive.scss.css' | asset_url }}">
+<link rel="preload" as='style'  type="text/css" href="{{ 'quickviews_popup_cart.scss.css' | asset_url }}">
+<link rel="stylesheet" href="{{'bootstrap-4-3-min.css' | asset_url}}">
+{{ 'main.scss.css' | asset_url | stylesheet_tag }}	
+
+{{ 'quickviews_popup_cart.scss.css' | asset_url | stylesheet_tag }}
+{% if template contains 'index' %}{{ 'index.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{% if template contains 'cart' %}{{ 'cartpage.scss.css' | asset_url | stylesheet_tag }}	{%endif%}
+{% if template contains 'blog' or template contains 'article'%}{{ 'blog_article_style.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{% if template contains 'collection' or template contains 'blog'  or template contains 'article' or template contains 'search' %}{{ 'sidebar_style.scss.css' | asset_url | stylesheet_tag }}	{%endif%}
+{% if template contains 'product' %}{{ 'product_style.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{% if template contains 'contact' %}{{ 'contact_style.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{% if template contains 'customers' %}{{ 'account_order_style.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{% if template contains 'collection' or template contains 'search' %}{{ 'collection_style.scss.css' | asset_url | stylesheet_tag }}{%endif%}
+{{'responsive.scss.css' | asset_url | stylesheet_tag}}

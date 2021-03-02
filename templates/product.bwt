@@ -1,0 +1,925 @@
+{% assign variantCount = product.variants | size %}
+{% assign on_var = false %}
+{% if variantCount > 1 %}
+{% assign on_var = true %}
+{% endif %}
+{%assign contact = false%}
+{%if product.price == 0 %}
+{%assign contact = true%}
+{%endif%}
+{%assign baohanh = false%}
+{% for tag in product.tags %}
+{%assign tags = tag%}
+{%if tags contains 'baohanh_'%}
+{%assign sothang = tags | remove: 'baohanh_'%}
+{%assign baohanh = true%}
+{%endif%}
+{% endfor%}
+
+
+{% include 'breadcrumb' %} 
+<section class="product details-main" itemscope itemtype="https://schema.org/Product">	
+	<meta itemprop="url" content="{{ store.url }}{{ product.url }}">
+	<meta itemprop="name" content="{{ product.name }}">
+	<meta itemprop="image" content="http:{{ product.featured_image.src | img_url: 'grande' }}">
+	<meta itemprop="description" content="{{product.summary_or_content | strip_html | replace:'"','' }}">
+	{%if product.vendor != null%}
+	<meta itemprop="brand" content="{{product.vendor}}">
+	{% endif %}
+	{%if product.type != null%}
+	<meta itemprop="model" content="{{ product.style }}">
+	{%endif%}
+	{%if product.variants[0].sku != null%}
+	<meta itemprop="sku" content="{{product.variants[0].sku }}">
+	{% endif %}
+	{%if product.variants[0].barcode != null%}
+	<meta itemprop="gtin8" content="{{product.variants[0].barcode }}">
+	{% endif %}
+	<div class="hidden" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+		<div class="inventory_quantity hidden" itemscope itemtype="http://schema.org/ItemAvailability">
+			{% if product.available %}
+			<span class="a-stock" itemprop="supersededBy">
+				Còn hàng
+			</span>
+			{% else %}
+			<span class="a-stock" itemprop="supersededBy">
+				Hết hàng
+			</span>
+			{% endif %}
+		</div>
+		<link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+		<meta itemprop="priceCurrency" content="{{ store.currency }}">
+		<meta itemprop="price" content="{{ product.variants[0].price | round }}">
+		<meta itemprop="url" content="https:{{ store.url }}{{ product.url }}">
+		{% if product.variants[0].compare_at_price > 0 %}
+		<meta itemprop="priceSpecification" content="{{ product.variants[0].compare_at_price | round }}">
+		{% endif %}
+		<meta itemprop="priceValidUntil" content="2099-01-01">
+	</div>
+	{% if product.metafields.bpr.votes %}
+	<div itemprop="review" itemscope itemtype="https://schema.org/Review" class="hidden">
+		<span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Thing">
+			<span itemprop="name">{{ product.name }}</span>
+		</span>
+		<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+			<span itemprop="name">{{ store.name }}</span>
+		</span>
+		<div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" class="hidden">
+
+			<span itemprop="ratingValue">10</span> out of
+			<span itemprop="bestRating">10</span>
+		</div>
+		<span itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+			<meta itemprop="name" content="{{ store.name }}">
+		</span>
+	</div>
+	{% endif %}
+	<form enctype="multipart/form-data" id="add-to-cart-form" action="/cart/add" method="post" class="form_background form-inline margin-bottom-0">
+		<div class="container">
+			<div class="section wrap-padding-15 wp_product_main">
+				<div class="details-product section">
+					<div class="row ">
+						<div class="product-detail-left product-images col-xs-12 col-sm-12 col-md-6 col-lg-5 ">
+
+							<div class="{% if product.images.size > 1 and settings.product_thumb_enable%}col_large_default{% else %}col_large_full{% endif %} large-image">
+
+								{%if product.images.size > 0%}
+								<a {%if settings.product_lightbox_enable%} href="{{ product.featured_image.src | img_url:'1024x1024' }}" data-rel="prettyPhoto[product-gallery]" {%else%} href="javascript:;"{%endif%}>
+									{% assign featured_image_alt = product.featured_image.alt | default: product.name %}
+									<img class="checkurl img-responsive" {%if product.images.size > 0 and settings.product_zoom_enable%}id="img_01"{%endif%} src="{{ product.featured_image.src | img_url:'1024x1024' }}" alt="{{ featured_image_alt | default:product.name }}">
+								</a>
+								{%else%}
+								<a data-href="{{ product.featured_image.src | img_url:'1024x1024' }}" class="large_image_url checkurl">
+									{% assign featured_image_alt = product.featured_image.alt | default: product.name %}
+									<img src="https://bizweb.dktcdn.net/thumb/1024x1024/assets/themes_support/noimage.gif" alt="{{ featured_image_alt | default:product.name}}">
+								</a>
+								{%endif%}
+								<div class="hidden">
+									{% for image in product.images offset:1%}
+									{%if image.alt ==""%}
+									{% assign alt = product.name %}
+									{%else%}
+									{% assign alt = image.alt | default: product.name%}
+									{%endif%}
+									<div class="item">
+										<a href="{{ image.src }}" title="{{alt}}" data-image="{{ image.src }}" data-zoom-image="{{ image.src }}" {%if settings.product_lightbox_enable%} data-rel="prettyPhoto[product-gallery]" {%endif%}>	
+										</a>
+									</div>	
+									{% endfor %}
+								</div>
+							</div>
+							{%if product.images.size  > 1 and settings.product_thumb_enable%}
+							<div class="section slickthumb_relative_product_1">
+								<div id="gallery_02" class="slickproduct thumb_product_details">
+									{% for image in product.images %}
+									<div class="item">
+										<a href="javascript:void(0)"  data-zoom-image="{{ image.src | img_url: '1024x1024' }}">
+											<img class="lazyload" data-img="{{ image.src | img_url:'1024x1024' }}" src="{{'rolling.svg' | asset_url}}" data-src="{{ image.src | img_url:'small' }}" alt="{{ image.alt | default:product.name}}">
+										</a>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							{%endif%}
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7 details-pro">
+							<h1 class="title-product">{{ product.name }}</h1>
+							<div class="group-status">
+								<span class="first_status">Thương hiệu:<span class="status_name">
+									{%if product.vendor != null and product.vendor !=""%}
+									{{product.vendor}}
+									{%else%}
+									Đang cập nhật
+									{%endif%}
+									</span>
+									<span class="line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+								</span>
+								<span class="first_status status_2">
+									Tình trạng: 
+									{% if on_var %} 
+									<span class="status_name availabel hasvariant">
+										{%if product.selected_or_first_available_variant.available%}
+										<span class="status_name availabel">
+											Còn hàng
+										</span>
+										{%elsif product.selected_or_first_available_variant.inventory_quantity == 0 and product.selected_or_first_available_variant.inventory_policy == 'continue'%}
+										<span class="status_name availabel">
+											Còn hàng
+										</span>
+										{%else%}
+										<span class="status_name availabel">
+											Hết hàng
+										</span>
+										{%endif%}
+									</span>
+									{%else%}
+									{%if product.available%}
+									<span class="status_name availabel">
+										Còn hàng
+									</span>
+									{%elsif product.inventory_quantity == 0 and product.inventory_policy == 'continue'%}
+									<span class="status_name availabel">
+										Còn hàng
+									</span>
+									{%else%}
+									<span class="status_name availabel">
+										Hết hàng
+									</span>
+									{%endif%}
+									{%endif%}
+								</span>
+							</div>
+							{%if settings.product_tab3_enable%}
+							<div class="danhgiasao">
+								<div class="sapo-product-reviews-badge" data-id="{{ product.id }}"></div>
+								<span class="danhgiasp"><i class="fa fa-edit"></i><a href="#" onclick="scrollToxx();">&nbsp;Viết đánh giá của bạn</a></span>
+							</div>
+							{%endif%}
+							<div class="price-box">
+								{%if on_var%}
+								<span class="special-price"><span class="price product-price" >{{ product.selected_or_first_available_variant.price | money }}</span> 
+								</span> <!-- Giá Khuyến mại -->
+								<span class="old-price">
+									<del class="price product-price-old">
+										{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+										{{ product.selected_or_first_available_variant.compare_at_price | money }}
+										{% endif %}
+									</del> 
+								</span> <!-- Giá gốc -->
+								{%elseif contact%}
+								<div class="special-price"><span class="price product-price">Liên hệ </span> </div> <!-- Hết hàng -->
+								{%elseif product.variants[0].compare_at_price > product.variants[0].price%}
+								<span class="special-price"><span class="price product-price">{{ product.variants[0].price | money }}</span> 
+								</span> <!-- Giá Khuyến mại -->
+								<span class="old-price">
+									<del class="price product-price-old sale">{{ product.variants[0].compare_at_price | money }}</del> 
+								</span> <!-- Giá gốc -->
+								{% else %}
+								<div class="special-price"><span class="price product-price">{{ product.variants[0].price | money }}</span> 
+								</div> <!-- Giá -->
+								{% endif %}
+							</div>
+							{%if settings.user_product_sumary%}
+							<div class="product-summary">
+								<div class="rte">
+									{%if product.summary != null and product.summary != '' and product.summary !=""%}
+									{{product.summary}}
+									{%else%}
+									<span>Mô tả đang cập nhật</span>
+									{%endif%}
+								</div>
+							</div>
+							{%endif%}
+							<div class="form-product col-sm-12">
+
+								{% if settings.product_swatch_enable and product.variants.size > 1 %}
+								{% for option in product.options %}
+								{% include 'swatch' with option %}
+								{% endfor %}
+								{% endif %}
+								<div class="box-variant clearfix {% if settings.product_swatch_enable and product.variants.size > 1%} d-none {%endif%}">
+									{% if variantCount > 1 %} 
+									<fieldset class="form-group">
+										<select id="product-selectors" class="form-control form-control-lg" name="variantId" style="display:none">
+											{% for variant in product.variants %}
+											<option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money }}</option>
+											{% endfor %}
+										</select>
+									</fieldset>
+									{% else %}
+									<input type="hidden" name="variantId" value="{{ product.variants[0].id }}" />
+									{% endif %}
+								</div>
+								<div class="form-group form_button_details margin-top-15">
+									<div class="form_product_content type1 {%if contact%}hidden{%endif%}">
+										<div class="soluong soluong_type_1 {% if product.available %}show{%else%}hidden{%endif%}">
+											<label>Số lượng:</label>
+											<div class="custom input_number_product custom-btn-number form-control">									
+												<button class="btn_num num_1 button button_qty" onClick="var result = document.getElementById('qtym'); var qtypro = result.value; if( !isNaN( qtypro ) &amp;&amp; qtypro &gt; 1 ) result.value--;return false;" type="button">-</button>
+												<input type="text" id="qtym" name="quantity" value="1" maxlength="3" class="form-control prd_quantity " onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" onchange="if(this.value == 0)this.value=1;">
+												<button class="btn_num num_2 button button_qty" onClick="var result = document.getElementById('qtym'); var qtypro = result.value; if( !isNaN( qtypro )) result.value++;return false;" type="button">+</button>
+											</div>
+										</div>
+										<div class="button_actions clearfix">
+											{% if product.available %}
+											<button type="submit" class="btn btn_base btn_add_cart btn-cart add_to_cart">
+												<span class="text_1">Thêm vào giỏ hàng</span>
+											</button>									
+											{% else %}
+											<button class="btn btn_base btn_dis btn-cart" disabled="disabled" >
+												<span class="text_1">Hết hàng</span>
+											</button>
+											{% endif %}
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</form>
+
+	<section class="section sec_tab ">
+		<div class="container">
+			<div class="row">
+				<div class="tab_h col-xs-12 col-lg-12 col-sm-12 col-md-12">
+					<div class="section bg_white">
+						{%if settings.product_tab_enable %}
+						<!-- Nav tabs -->
+						<div class="product-tab e-tabs not-dqtab">
+							<ul class="tabs tabs-title clearfix">	
+								{%if settings.product_tab1_enable%}
+								<li class="tab-link" data-tab="tab-1">
+									<h3><span>{{settings.product_tab1_title}}</span></h3>
+								</li>																	
+								{%endif%}
+								{%if settings.product_tab2_enable%}
+								<li class="tab-link" data-tab="tab-2">
+									<h3><span>{{settings.product_tab2_title}}</span></h3>
+								</li>																	
+								{%endif%}
+								{%if settings.product_tab3_enable%}
+								<li class="tab-link" data-tab="tab-3" id="tab-review">
+									<h3><span>{{settings.product_tab3_title}}</span></h3>
+								</li>																	
+								{%endif%}
+
+							</ul>																									
+							<div class="tab-float">
+								{%if settings.product_tab1_enable%}
+								<div id="tab-1" class="tab-content content_extab">
+									<div class="rte product_getcontent">
+										{%if product.content != null and product.content != '' %}
+										<div id="content">
+											{{product.content}}
+										</div>
+										{%else%}
+										Thông tin sản phẩm đang được cập nhật
+										{%endif%}
+									</div>
+								</div>
+								{%endif%}
+								{%if settings.product_tab2_enable%}
+								<div id="tab-2" class="tab-content content_extab">
+									{%if settings.product_tab2_content != null%}
+									{{ settings.product_tab2_content }}	
+									{%else%}
+									Đây là tab tuỳ chỉnh
+									{%endif%}
+								</div>	
+								{%endif%}
+								{%if settings.product_tab3_enable%}
+								<div id="tab-3" class="tab-content content_extab tab-review-c">
+									<div class="rte">
+										{% include 'product-reviews' %}
+									</div>
+								</div>	
+								{%endif%}
+							</div>	
+						</div>
+						{%endif%}
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					{%assign check11 = product.url%}
+					{% assign productRelate = product.collections.first.alias %}
+					{% assign productRelateCheck = product.collections.size %}
+					{% assign productRelateCheck2 = product.collections.first.products_count %}	
+					<div class="section_prd_feature" id="sidebarproduct">
+						<div class="title_module section">
+							<h2 class="bf_flower">
+								<a href="/{{ productRelate | handleize }}" title="{{ settings.sanphamlienquan_title }}">{{ settings.sanphamlienquan_title }}</a>
+							</h2>
+						</div>
+						{% if productRelateCheck > 0 and productRelateCheck2 > 1  %}
+						<div class=" section products product_related slick-product slickrelated">
+							{% for product in collections[productRelate]products limit: settings.limit_sanphamlienquan%}
+							{%unless check11 == product.url%}
+							<div class="item">
+								<div class="item_product_main">
+									{% include 'product_grid_office' %}
+								</div>
+							</div>
+							{%endunless%}
+							{% endfor %}
+						</div>
+						{%else%}
+						<p>
+							Không có sản phẩm nào cùng loại
+						</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+
+</section>
+
+
+{%if settings.product_zoom_enable%}
+{{ 'jquery.elevatezoom308.min.js' | asset_url | script_tag }}		
+{%endif%}
+
+<script> 
+
+
+
+
+
+	var ww = $(window).width();
+	var getLimit = {{ settings.product_recent_limit | default: 3 }};
+
+	function validate(evt) {
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		key = String.fromCharCode( key );
+		var regex = /[0-9]|\./;
+		if( !regex.test(key) ) {
+			theEvent.returnValue = false;
+			if(theEvent.preventDefault) theEvent.preventDefault();
+		}
+	}
+
+	var selectCallback = function(variant, selector) {
+
+
+		if (variant) {
+
+
+			var form = jQuery('#' + selector.domIdPrefix).closest('form');
+
+			for (var i=0,length=variant.options.length; i<length; i++) {
+
+				var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
+				if (radioButton.size()) {
+					radioButton.get(0).checked = true;
+				}
+			}
+		}
+		var addToCart = jQuery('.form-product .btn-cart'),
+			group = jQuery('.form_product_content'),
+			form = jQuery('.form-product .button_actions'),
+			form2 = jQuery('.soluong'),
+			product_sku = jQuery('.details-pro .product_sku .status_name'),
+			productPrice = jQuery('.details-pro .special-price .product-price'),
+			qty = jQuery('.first_status .availabel'),
+			sale = jQuery('.details-pro .old-price .product-price-old'),
+			comparePrice = jQuery('.details-pro .old-price .product-price-old'),
+			vat = jQuery('.form-group .vat');
+
+		/* SKU */
+		if (variant && variant.sku != "" && variant.sku != null) {
+			product_sku.html(variant.sku);
+		} else {
+			product_sku.html('Đang cập nhật');
+		}
+		/*** VAT ***/
+		if (variant){
+			if (variant.taxable){
+				$('.form-group').removeClass('hidden').find('.vat').text('(Đã bao gồm VAT)');
+			} else {
+				$('.form-group').removeClass('hidden').find('.vat').text('(Chưa bao gồm VAT)');
+			}
+		}
+
+		if (variant && variant.available) {
+			if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+				if (variant.inventory_quantity != 0) {
+					qty.html('<link itemprop="availability" href="http://schema.org/OutOfStock" />Còn hàng');
+				} else if (variant.inventory_quantity == ''){
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Hết hàng');
+				}
+			} else {
+				qty.html('<link itemprop="availability" href="http://schema.org/OutOfStock" />Còn hàng');
+			}
+
+			group.removeClass('hidden');
+			addToCart.html('<span class="text_1">Thêm vào giỏ hàng</span>').removeAttr('disabled');	
+			if(variant.price == 0){
+				productPrice.html('Liên hệ');	
+				comparePrice.hide();
+				form.addClass('hidden');
+				vat.addClass('hidden');
+				form2.addClass('hidden');
+				sale.removeClass('sale');
+				group.addClass('hidden');
+				if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+					if (variant.inventory_quantity != 0) {
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+					} else if (variant.inventory_quantity == ''){
+						qty.html('<link itemprop="availability" href="http://schema.org/OutOfStock" />Hết hàng');
+					}
+				} else {
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+				}
+			}else{
+				form.removeClass('hidden');
+				productPrice.html(Bizweb.formatMoney(variant.price, "{{ store.money_format }}"));
+													 // Also update and show the product's compare price if necessary
+													 if ( variant.compare_at_price > variant.price ) {
+								  comparePrice.html(Bizweb.formatMoney(variant.compare_at_price, "{{ store.money_format }}")).show();
+								  sale.addClass('sale');
+
+				if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+					if (variant.inventory_quantity != 0) {
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+						form2.removeClass('hidden');
+						form.removeClass('hidden');
+						vat.removeClass('hidden');
+					} else if (variant.inventory_quantity == ''){
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+						form2.removeClass('hidden');
+						form.removeClass('hidden');
+						vat.removeClass('hidden');
+					}
+				} else {
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+					form2.removeClass('hidden');
+					form.removeClass('hidden');
+					vat.removeClass('hidden');
+				}
+
+			} else {
+				comparePrice.hide();  
+				sale.removeClass('sale');
+				form2.removeClass('hidden');
+				vat.removeClass('hidden');
+				if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+					if (variant.inventory_quantity != 0) {
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+						form2.removeClass('hidden');
+						form.removeClass('hidden');
+					} else if (variant.inventory_quantity == ''){
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+						form2.removeClass('hidden');
+						form.removeClass('hidden');
+					}
+				} else {
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+					form2.removeClass('hidden');
+					form.removeClass('hidden');
+				}
+			}       										
+		}
+
+	} else {
+		addToCart.html('<span class="text_1">Hết hàng</span>').attr('disabled', 'disabled');
+		qty.html('Hết hàng');
+		form.removeClass('hidden');
+		form2.addClass('hidden');
+		group.removeClass('hidden');
+		vat.removeClass('hidden');
+
+		if(variant){
+			if(variant.price != 0){
+				form.removeClass('hidden');
+				productPrice.html(Bizweb.formatMoney(variant.price, "{{ store.money_format }}"));
+													 // Also update and show the product's compare price if necessary
+													 if ( variant.compare_at_price > variant.price ) {
+								  form.addClass('hidden');
+				comparePrice.html(Bizweb.formatMoney(variant.compare_at_price, "{{ store.money_format }}")).show();
+													 sale.addClass('sale');
+								  addToCart.html('<span class="text_1">Hết hàng</span>').attr('disabled', 'disabled').removeClass('hidden');
+
+				if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+					if (variant.inventory_quantity != 0) {
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+					} else if (variant.inventory_quantity == ''){
+						qty.html('<link itemprop="availability" href="http://schema.org/OutOfStock" />Hết hàng');
+						form2.addClass('hidden');
+						form.removeClass('hidden');
+					}
+				} else {
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+				}
+
+			} else {
+				comparePrice.hide();   
+				vat.removeClass('hidden');
+				sale.removeClass('sale');
+				form.addClass('hidden');
+				addToCart.html('<span class="text_1">Hết hàng</span>').attr('disabled', 'disabled').removeClass('hidden');
+				if(variant.inventory_management == "bizweb" || variant.inventory_management == "sapo"){
+					if (variant.inventory_quantity != 0) {
+						qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+					} else if (variant.inventory_quantity == ''){
+						form2.addClass('hidden');
+						qty.html('<link itemprop="availability" href="http://schema.org/OutOfStock" />Hết hàng');
+						form.removeClass('hidden');
+
+					}
+				} else {
+					qty.html('<link itemprop="availability" href="http://schema.org/InStock" />Còn hàng');
+				}
+			}     
+		}else{
+			productPrice.html('Liên hệ');
+			form2.addClass('hidden');
+			vat.addClass('hidden');
+			comparePrice.hide();
+			form.addClass('hidden');	
+			sale.removeClass('sale');
+		}
+	}else{
+		productPrice.html('Liên hệ');	
+		form2.addClass('hidden');
+		vat.addClass('hidden');
+		comparePrice.hide();
+		form.addClass('hidden');	
+		sale.removeClass('sale');
+	}
+	}
+	/*begin variant image*/
+	if (variant && variant.image) {  
+		var originalImage = jQuery(".large-image img"); 
+		var newImage = variant.image;
+		var element = originalImage[0];
+		Bizweb.Image.switchImage(newImage, element, function (newImageSizedSrc, newImage, element) {
+			jQuery(element).parents('a').attr('data-href', newImageSizedSrc);
+			jQuery(element).attr('src', newImageSizedSrc);
+			jQuery('.thumb_scroll img').attr('src', newImageSizedSrc);
+			if (ww >= 1200){
+				{% if settings.product_zoom_enable and product.variants.size > 0 %}
+				$("#img_01").data('zoom-image', newImageSizedSrc).elevateZoom({
+					responsive: true,
+					gallery:'gallery_02',
+					cursor: 'pointer',
+					galleryActiveClass: "active"
+				});
+				$("#img_01").bind("click", function(e) {
+					var ez = $('#img_02').data('elevateZoom');
+				});
+				{% endif %}
+			}
+		});
+
+		setTimeout(function(){
+			$('.checkurl').attr('href',$(this).attr('src'));
+
+			if (ww >= 1200){
+				{% if settings.product_zoom_enable and product.variants.size > 0 %}
+				$('.zoomContainer').remove();
+				$("#img_01").elevateZoom({
+					gallery:'gallery_02', 
+					zoomWindowWidth:420,
+					zoomWindowHeight:500,
+					zoomWindowOffetx: 10,
+					easing : true,
+					scrollZoom : false,
+					cursor: 'pointer', 
+					galleryActiveClass: 'active', 
+					imageCrossfade: true
+				});
+				{% endif %}
+			}
+		},200);
+
+	} 
+	};
+	jQuery(function($) {
+		{% if  product.variants.size > 1 %}
+		if(navigator.userAgent.indexOf("Speed Insights") == -1) {
+
+			new Bizweb.OptionSelectors('product-selectors', {
+				product: {{ product | json }},
+				onVariantSelected: selectCallback, 
+				enableHistoryState: true
+			});     
+		}
+
+		{% endif %}
+
+		// Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+		{% if product.options.size == 1 and product.options.first != 'Title' %}
+		$('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first }}</label>');
+											 {% endif %}
+
+											 // Hide selectors if we only have 1 variant and its title contains 'Default'.
+											 {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+											 $('.selector-wrapper').hide();
+		{% endif %} 
+		$('.selector-wrapper').css({
+			'text-align':'left',
+			'margin-bottom':'15px'
+		});
+	});
+
+	jQuery('.swatch :radio').change(function() {
+		var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
+		var optionValue = jQuery(this).val();
+		jQuery(this)
+			.closest('form')
+			.find('.single-option-selector')
+			.eq(optionIndex)
+			.val(optionValue)
+			.trigger('change');
+	});
+
+	$(".dp-flex img").click(function(e){
+		e.preventDefault();
+		var hr = $(this).attr('data-src');
+		$('.checkurl ').attr('src',hr);
+		$('.large-image a').attr('data-href',hr);
+	});
+
+	if (ww >= 1200){
+		{% if settings.product_zoom_enable and product.variants.size > 0 %}
+		$(document).ready(function() {
+			if($(window).width()>1200){
+				$('#img_01').elevateZoom({
+					gallery:'gallery_02', 
+					zoomWindowWidth:420,
+					zoomWindowHeight:500,
+					zoomWindowOffetx: 10,
+					easing : true,
+					scrollZoom : true,
+					cursor: 'pointer', 
+					galleryActiveClass: 'active', 
+					imageCrossfade: true
+				});
+			}
+		});
+		{% endif %}
+	}
+	$("#img_02").click(function(e){
+		e.preventDefault();
+		var hr = $(this).attr('src');
+		$('#img_01').attr('src',hr);
+		$('.large_image_url').attr('href',hr);
+		$('#img_01').attr('data-zoom-image',hr);
+	});
+
+
+	/*For recent product*/
+	var alias = '{{product.alias}}';
+	/*end*/
+	if (ww >= 1200){
+		{% if settings.product_zoom_enable and product.variants.size > 0 %}
+		$(document).ready(function() {
+			$('#img_01').elevateZoom({
+				gallery:'gallery_02', 
+				zoomWindowWidth:420,
+				zoomWindowHeight:500,
+				zoomWindowOffetx: 10,
+				easing : true,
+				scrollZoom : true,
+				cursor: 'pointer', 
+				galleryActiveClass: 'active', 
+				imageCrossfade: true
+
+			});
+		});
+		{% endif %}
+	}
+	$('#gallery_00 img, .swatch-element label').click(function(e){
+
+		$('.checkurl').attr('href',$(this).attr('src'));
+
+
+		if (ww >= 1200){
+			{% if settings.product_zoom_enable and product.variants.size > 0 %}
+			setTimeout(function(){
+				$('.zoomContainer').remove();				
+				$('#zoom_01').elevateZoom({
+					gallery:'gallery_01', 
+					zoomWindowWidth:420,
+					zoomWindowHeight:500,
+					zoomWindowOffetx: 10,
+					easing : true,
+					scrollZoom : true,
+					cursor: 'pointer', 
+					galleryActiveClass: 'active', 
+					imageCrossfade: true
+				});
+			},300);
+			{% endif %}
+		}
+	});
+	$(".not-dqtab").each( function(e){
+		$(this).find('.tabs-title li:first-child').addClass('current');
+		$(this).find('.tab-content').first().addClass('current');
+
+		$(this).find('.tabs-title li').click(function(){
+			if($(window).width()>315){	
+				if($(this).hasClass('current')){
+
+				}else{
+					var tab_id = $(this).attr('data-tab');
+					var url = $(this).attr('data-url');
+					$(this).closest('.e-tabs').find('.tab-viewall').attr('href',url);
+
+					$(this).closest('.e-tabs').find('.tabs-title li').removeClass('current');
+					$(this).closest('.e-tabs').find('.tab-content').removeClass('current');
+
+					$(this).addClass('current');
+					$(this).closest('.e-tabs').find("#"+tab_id).addClass('current');
+				}
+			}else{
+				var tab_id = $(this).attr('data-tab');
+				var url = $(this).attr('data-url');
+				$(this).closest('.e-tabs').find('.tab-viewall').attr('href',url);
+
+				$(this).closest('.e-tabs').find('.tabs-title li').removeClass('current');
+				$(this).closest('.e-tabs').find('.tab-content').removeClass('current');
+
+				$(this).addClass('current');
+				$(this).closest('.e-tabs').find("#"+tab_id).addClass('current');
+
+			}
+
+		});    
+	});
+
+</script>
+
+<script>
+
+
+	function scrollToxx() {
+		$('html, body').animate({ scrollTop: $('.product-tab.e-tabs').offset().top }, 'slow');
+		$('.product-tab .tab-link').removeClass('current');
+		$('#tab-review').addClass('current');
+		$('.tab-content').removeClass('current');
+		$('.tab-review-c').addClass('current');
+		return false;
+	}
+
+
+	$(document).ready(function (e) {
+
+
+
+		var wDW = $(window).width();
+		$('#gallery_02').slick({
+			autoplay: false,
+			autoplaySpeed: 6000,
+			dots: false,
+			arrows: true,
+			infinite: false,
+			speed: 300,
+			slidesToShow: 5,
+			slidesToScroll: 5,
+			responsive: [
+				{
+					breakpoint: 1200,
+					settings: {
+						slidesToShow: 5,
+						slidesToScroll: 5
+					}
+				},
+				{
+					breakpoint: 1024,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 3
+					}
+				},
+				{
+					breakpoint: 991,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 4
+					}
+				},
+				{
+					breakpoint: 767,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 4
+					}
+				},
+				{
+					breakpoint: 475,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 3
+					}
+				}
+			]
+		});
+		$('.slickrelated').slick({
+			autoplay: false,
+			autoplaySpeed: 6000,
+			dots: false,
+			arrows: true,
+			infinite: false,
+			speed: 300,
+			slidesToShow: 4,
+			slidesToScroll: 4,
+			responsive: [
+				{
+					breakpoint: 1200,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 4
+					}
+				},
+				{
+					breakpoint: 1024,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 4
+					}
+				},
+				{
+					breakpoint: 991,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 1
+					}
+				},
+				{
+					breakpoint: 767,
+					settings: {
+						slidesToShow: 2,
+						slidesToScroll: 2
+					}
+				}
+			]
+		});
+
+
+
+
+		$('#gallery_02 img, .swatch-element label').click(function(e){
+			e.preventDefault();
+			var ths = $(this).attr('data-img');
+			$('.large-image .checkurl').attr('src', ths);
+
+			$('.large-image .checkurl img').attr('src', ths);
+
+			/*** xử lý active thumb -- ko variant ***/
+			var thumbLargeimg = $('.details-product .large-image a').attr('href');
+			var thumMedium = $('#gallery_02 .owl-item .item a').find('img').attr('src');
+			var url = [];
+
+			$('#gallery_02 .owl-item .item').each(function(){
+				var srcImg = '';
+				$(this).find('a img').each(function(){
+					var current = $(this);
+					if(current.children().size() > 0) {return true;}
+					srcImg += $(this).attr('src');
+				});
+				url.push(srcImg);
+				var srcimage = $(this).find('a img').attr('src');
+				if (srcimage == thumbLargeimg) {
+					$(this).find('a').addClass('active');
+				} else {
+					$(this).find('a').removeClass('active');
+				}
+			});
+		})
+
+	});
+
+
+
+</script>

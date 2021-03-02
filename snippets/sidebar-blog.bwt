@@ -1,0 +1,88 @@
+<aside class="aside-item blog-sidebar sidebar-category collection-category margin-bottom-25">
+	<div class="aside-title">
+		<h2 class="title-head margin-top-0 cate"><span>{{ settings.aside_category_blog_title }}</span></h2>
+	</div>
+	<div class="aside-content">
+		<nav class="nav-category navbar-toggleable-md">
+			<ul class="nav navbar-pills">
+				{% for link in linklists[settings.aside_category_blog_menu].links %}
+				{% if linklists[link.alias] %}
+				<li class="nav-item">
+					<a href="{{ link.url }}" class="nav-link {% if link.active %}active{% endif %}">
+						{{ link.title }}
+					</a>
+					<i class="fa fa-caret-down"></i>
+					<ul class="dropdown-menu">
+						{% for childlink in linklists[link.alias].links %}
+						{% if linklists[childlink.alias] %}
+						<li class="dropdown-submenu nav-item">
+							<a class="nav-link" href="{{ childlink.url }}">{{ childlink.title }}
+							</a>
+							<i class="fa fa-caret-down"></i>
+							<ul class="dropdown-menu">
+								{% for childlink2 in linklists[childlink.alias].links %}
+								<li class="nav-item lv3">
+									<a class="nav-link" href="{{ childlink2.url }}">{{ childlink2.title }}
+
+									</a>
+								</li>
+
+								{% endfor %}
+							</ul>                      
+						</li>
+						{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ childlink.url }}">{{ childlink.title }}
+
+							</a>
+						</li>
+						{% endif %}
+						{% endfor %}
+
+					</ul>
+				</li>
+				{% else %}
+				<li class="nav-item"><a class="nav-link" href="{{ link.url }}">{{ link.title }}
+
+					</a>
+
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul>
+		</nav>
+	</div>
+</aside>
+
+{% if settings.blogs_aside_enable %}
+<div class="blog-aside aside-item blog-aside-article">
+	<div class="aside-title">
+		<h2 class="title-head"><span><a href="{{settings.blogs_aside_url}}" title="{{ settings.blogs_aside_title }}">{{ settings.blogs_aside_title }}</a></span></h2>
+	</div>
+	<div class="aside-content-article aside-content margin-top-0">
+		<div class="blog-list blog-image-list">
+			{%assign blog_sizes = blogs[settings.blogs_aside_url].articles_count%}
+			{%if blog_sizes >= 1%}
+			{% for article in blogs[settings.blogs_aside_url].articles  limit : settings.blogs_aside_limit %}
+			<div class="loop-blog">
+				<div class="thumb-left">
+					<a href="{{ article.url }}">
+						{% if article.image == null %}
+						<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{'800x800.png' | asset_url | img_url:'small'}}" alt="{{ article.title }}" title="{{ article.title }}">
+						{%else%}
+						<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{ article.image.src | img_url:'small' }}" title="{{ article.title }}" alt="{{ article.title }}">
+						{%endif%}
+					</a>
+				</div>
+				<div class="name-right">
+					<h3><a href="{{ article.url }}" title="{{ article.title}}">{{ article.title }}</a></h3>
+				</div>
+			</div>
+			{% endfor %}
+			{%else%}
+			<p class="a-center block">Đang cập nhật bài viết</p>
+			{%endif%}
+		</div>
+	</div>
+</div>
+{% endif %}

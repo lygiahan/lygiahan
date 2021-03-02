@@ -1,0 +1,49 @@
+{% include 'breadcrumb' %} 
+<section class="signup page_customer_account">
+	<div class="container">
+		<div class="row">
+			{% if form.posted_successfully %}
+						<div class="alert alert-success">
+							<p>đổi mật khẩu thành công</p>
+						</div>
+						{% endif %}
+			<div class="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
+				<div class="block-account">
+					<h5 class="title-account">Trang tài khoản</h5>
+					<p>Xin chào, <span style="color:{{settings.main-color}};">{{ customer.name }}</span>&nbsp;!</p>
+					<ul>
+						<li>
+							<a disabled="disabled" class="title-info active" href="javascript:void(0);">Thông tin tài khoản</a>
+						</li>
+						<li>
+							<a class="title-info" href="/account/orders">Đơn hàng của bạn</a>
+						</li>
+						<li>
+							<a class="title-info" href="/account/changepassword">Đổi mật khẩu</a>
+						</li>
+						<li>
+							<a class="title-info" href="/account/addresses">Sổ địa chỉ ({{ customer.addresses_count }})</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
+				<h1 class="title-head margin-top-0">Thông tin tài khoản</h1>
+				<div class="form-signup name-account m992"> 
+					<p><strong>Họ tên:</strong>  {{ customer.name }}</p>
+					<p> <strong>Email:</strong> {{ customer.email }}</p>
+					{% if customer.default_address.phone != null and customer.default_address.phone != "" %}
+					<p> <strong>Điện thoại:</strong> {{ customer.default_address.phone }} </p>
+					{%endif%}
+					{% if customer.default_address.company != null and customer.default_address.company != "" %}
+					<p><strong>Công ty:</strong> {{ customer.default_address.company }}</p>
+					{%endif%}
+					{%if customer.default_address%}
+					<p><strong>Địa chỉ :</strong> {% if customer.default_address.address1 != null and customer.default_address.address1 != "" %}{{ customer.default_address.address1 }},{%endif%} {% if customer.default_address.district != null and customer.default_address.district != "" %}{{ customer.default_address.district }},{%endif%} {% if customer.default_address.city != null and customer.default_address.city != "" %}{{ customer.default_address.city }},{%endif%} {% if customer.default_address.country != null and customer.default_address.country != "" %}{{ customer.default_address.country }}{%endif%}</p>
+					{%endif%}
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</section>

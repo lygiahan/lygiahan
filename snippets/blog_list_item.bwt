@@ -1,0 +1,45 @@
+<div class="blogwp clearfix">
+	{% if article.image != null %}
+	<a  class="image-blog" href="{{ article.url }}" title="{{ article.title }}">
+		<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{ article.image.src}}"  alt="{{ article.title }}">
+	</a>
+	{%else%}
+	<a class="image-blog" href="{{ article.url }}">
+		<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC" data-src="{{ '555x350.png' | asset_url}}" alt="{{ article.title }}" title="{{ article.title }}"/>
+	</a>
+	{% endif %}
+	<div class="content_blog clearfix">
+		<h3>
+			<a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+		</h3>
+		<div class="time-post f">
+			{%assign thu = article.published_on | date:'%a' %}
+			<i class="far fa-clock"></i>
+			{%if thu == 'Mon'%}
+			Thứ Hai,
+			{%elsif thu == 'Tue'%}
+			Thứ Ba,
+			{%elsif thu == 'Wed'%}
+			Thứ Tư,
+			{%elsif thu == 'Thu'%}
+			Thứ Năm,
+			{%elsif thu == 'Fri'%}
+			Thứ Sáu,
+			{%elsif thu == 'Sat'%}
+			Thứ Bảy,
+			{%elsif thu == 'Sun'%}
+			Chủ Nhật,
+			{%else%}
+			Thứ {{ article.published_on | date:'%a' }}
+			{%endif%}{{ article.published_on | date:'dd/MM/yyy' }}
+		</div>
+		<div class="time-post">
+			<i class="fa fa-user"></i> <span>{{article.author}}</span>
+		</div>
+		<p class="justify">{{ article.content | strip_html | truncatewords: 25 }}
+		</p>
+		{%if article.content != null and article.content != ""%}
+		<a class="button_custome_35" href="{{ article.url }}" title="Đọc tiếp">Đọc tiếp</a>
+		{%endif%}
+	</div>
+</div>

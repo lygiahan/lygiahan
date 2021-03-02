@@ -1,0 +1,130 @@
+{% assign sold_out = true %}
+{% if product.available  %}
+{% assign sold_out = false %}
+{% assign awe-price = product.selected_or_first_available_variant.price %}
+{% assign awe-variant = product.selected_or_first_available_variant.title %}
+{% assign awe-compare-price = product.selected_or_first_available_variant.compare_at_price %}
+{% else%}
+{% assign awe-price = product.variants[0].price %}
+{% assign awe-variant = product.variants[0].title %}
+{% assign awe-compare-price = product.variants[0].compare_at_price %}
+{% endif %} 
+{% assign contact = false %}
+{% if awe-price == 0 %}
+{% assign contact = true %}
+{% endif%}
+{% assign on_sale = false %}
+{% if awe-compare-price > awe-price %}
+{% assign on_sale = true %}
+{% endif %}
+{% assign variantCount = product.variants | size %}
+{% assign on_var = false %}
+{% if variantCount > 1 %}
+{% assign on_var = true %}
+{% endif %}
+
+
+{% if awe-compare-price > awe-price %}
+{% capture discount %} 
+{{awe-compare-price | minus:awe-price | times:100 | divided_by:awe-compare-price | round }}% 
+{% endcapture %}
+{% assign pt = awe-compare-price | minus:awe-price | times:100 | divided_by:awe-compare-price%}
+{% if pt > 99 %}
+{% capture discount %}
+99%
+{% endcapture %}
+{% endif%}
+{% if pt < 1 %}
+{% capture discount %}
+1%
+{% endcapture %}
+{% endif %}
+{% assign on_sale = true %}
+{% endif %}
+{% assign variantCount = product.variants | size %}
+{% assign on_var = false %}
+{% if variantCount > 1 %}
+{% assign on_var = true %}
+{% endif %}
+
+{% if awe-compare-price > awe-price %}
+{% capture discount %} 
+{{awe-compare-price | minus:awe-price | times:100 | divided_by:awe-compare-price | round }}% 
+{% endcapture %}
+{% assign pt = awe-compare-price | minus:awe-price | times:100 | divided_by:awe-compare-price %}
+{% if pt > 99 %}
+{% capture discount %}
+99%
+{% endcapture %}
+{%endif%}
+{% if pt < 1 %}
+{% capture discount %}
+1%
+{% endcapture %}
+{% endif %}
+{% assign on_sale = true %}
+{% endif %}
+{% assign variantCount = product.variants | size %}
+{% assign on_var = false %}
+{% if variantCount > 1 %}
+{% assign on_var = true %}
+{% endif %}
+{% assign featured_image_alt = product.featured_image.alt | default: product.name %}
+
+<form action="/cart/add" method="post" class="variants product-action" data-id="product-actions-{{ product.id }}" enctype="multipart/form-data">
+	<div class="product-thumbnail">
+		<a class="product_overlay" href="{{ product.url }}" title="{{ product.name }}"></a>
+		<a class="image_thumb" href="{{ product.url }}" title="{{ product.name }}">
+			<img class="lazyload" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"  data-src="{{ product.featured_image.src | img_url:'large' }}" alt="{{ product.name }}">
+		</a>
+		{%if on_sale and contact == 'false'%}
+		<div class="saleright">
+			<span>-{{discount}}</span>
+		</div>
+		{%endif%}
+		{% if settings.quickview_enable %}
+		<a title="Xem nhanh" href="{{ product.url }}" data-handle="{{ product.alias }}" class="xem_nhanh btn-circle btn_view btn right-to quick-view">
+			<i class="fa fa-search-plus"></i>
+			<span class="text">Xem nhanh</span>
+		</a>
+		{% endif %}
+	</div>
+	<div class="product-info">
+		<h3 class="product-name"><a href="{{ product.url }}" title="{{ product.name }}">{{ product.name }}</a></h3>
+		<div class="price-box">
+			{% if contact %}
+			Liên hệ
+			{%else%}
+			{% if on_sale %}
+			{{  awe-price | money }}
+			{% if awe-compare-price > awe-price %}
+			<span class="compare-price">{{ awe-compare-price | money }}</span>
+			{% endif %}			
+			{% else %}
+			{{  awe-price | money }}
+			{% endif %}
+			{% endif %}
+		</div>
+		{% assign description_parts = product.content | split: "<h6>" %}
+		{% for part in description_parts %}
+		{% assign fp = part | append: " " | split: "</h6>" | last %}
+		{% assign p = part | append: " " | split: "</h6>" | last  | replace: "&nbsp;", "" | replace: " ", ""  %}
+		{% if p != "" or fp contains "<img" or fp contains "<iframe" %}
+		{% if forloop.index0 == '0' %}
+		{% else %}
+		{%if part != null and part != '' and part !=""%}
+		<div class="thongtinkhuyenmai">
+			<div class="content rte rte-summary">
+				{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}
+			</div>
+		</div>
+		{%else%}
+		<div>
+			Mô tả đang cập nhập...
+		</div>
+		{%endif%}
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+	</div>
+</form>
